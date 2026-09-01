@@ -2,8 +2,8 @@
 
 ## Project shape
 - Single Next.js app at the repository root; there are no workspace packages despite `pnpm-workspace.yaml` existing.
-- App Router entrypoints: `app/layout.tsx` wraps the app and `app/page.tsx` renders `components/chatty-app.tsx`.
-- `components/chatty-app.tsx` is a client-only, mostly self-contained Spanish UI prototype for ChattyAI; update copy in Spanish unless the product requirement says otherwise.
+- App Router entrypoints: `app/layout.tsx` wraps the app and `app/page.tsx` renders `components/layout/app-shell.tsx`.
+- `components/layout/app-shell.tsx` is the client shell for the Spanish ChattyAI UI; update visible copy in Spanish unless the product requirement says otherwise.
 - Shared UI primitives live under `components/ui`; aliases come from `components.json` and `tsconfig.json` (`@/*`, `@/components`, `@/lib`, `@/components/ui`).
 
 ## Toolchain and commands
@@ -23,3 +23,4 @@
 - Tailwind CSS v4 is wired through `postcss.config.mjs` with `@tailwindcss/postcss`.
 - Global styles and theme tokens are centralized in `app/globals.css`, including `@import 'tailwindcss'`, `tw-animate-css`, and `shadcn/tailwind.css`.
 - shadcn config uses `style: "base-nova"`, React Server Components enabled, and Lucide icons.
+- `components/ui/button.tsx`, `lib/utils.ts`, and their supporting dependencies are kept as shadcn/base-nova primitives even if the current app does not import them yet.

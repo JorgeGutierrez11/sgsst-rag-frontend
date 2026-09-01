@@ -1,5 +1,5 @@
-import ChattyApp from '@/components/chatty-app'
+import { AppShell } from '@/components/layout/app-shell'
 
 export default function Page() {
-  return <ChattyApp />
+  return <AppShell />
 }

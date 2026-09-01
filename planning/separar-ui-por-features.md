@@ -1,12 +1,14 @@
 # Plan de implementación: separar la UI por features
 
+> Estado: ejecutado. Este documento queda como historial de la refactorización; verificar el código actual antes de usarlo como plan activo.
+
 > Objetivo: reducir la complejidad de `components/chatty-app.tsx` antes de integrar api real, moviendo vistas, layout y tipos a módulos pequeños con responsabilidades claras.
 
 ## Contexto verificado
 
 - La app es un único proyecto Next.js en la raíz.
-- `app/page.tsx` renderiza `components/chatty-app.tsx`.
-- `components/chatty-app.tsx` concentra navegación, layout, home, consulta, diagnóstico, estado del chat y estado del diagnóstico.
+- Antes del refactor, `app/page.tsx` renderizaba `components/chatty-app.tsx`; después del refactor debe apuntar al layout shell actual.
+- Antes del refactor, `components/chatty-app.tsx` concentraba navegación, layout, home, consulta, diagnóstico, estado del chat y estado del diagnóstico.
 - La UI actual está en español; mantener copy visible en español salvo requisito contrario.
 - No hay scripts de `lint`, `test` ni `typecheck`; `pnpm build` no basta para tipos porque `next.config.mjs` ignora errores TypeScript.
 
