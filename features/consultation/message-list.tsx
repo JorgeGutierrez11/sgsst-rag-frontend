@@ -14,7 +14,7 @@ export function MessageList({ messages, loading }: MessageListProps) {
           <div className="avatar">{message.role === 'assistant' ? <Sparkles size={15} /> : <UserRound size={15} />}</div>
           <div className="message-bubble">
             {message.content}
-            {message.references && (
+            {message.references && message.references.length > 0 && (
               <div className="references">
                 <p><FileText size={14} /> Fuentes consultadas</p>
                 {message.references.map((reference, refIndex) => (
@@ -28,7 +28,8 @@ export function MessageList({ messages, loading }: MessageListProps) {
       {loading && (
         <div className="message-row assistant">
           <div className="avatar"><Sparkles size={15} /></div>
-          <div className="message-bubble typing"><span /><span /><span /></div>
+          <span className="sr-only">NormIA está preparando la respuesta.</span>
+          <div className="message-bubble typing" aria-hidden="true"><span /><span /><span /></div>
         </div>
       )}
     </div>

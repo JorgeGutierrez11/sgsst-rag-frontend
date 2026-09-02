@@ -305,7 +305,7 @@ Expected: los chips siguen llamando `send(example)` desde `ConsultationView`.
 
 Keep this copy in `consultation-composer.tsx` unless producto pida otra cosa:
 ```tsx
-<p>ChattyAI puede cometer errores. Verifica la información importante.</p>
+<p>NormIA puede cometer errores. Verifica la información importante.</p>
 ```
 
 Expected: el usuario sabe que debe verificar, pero la app no inventa respuestas.

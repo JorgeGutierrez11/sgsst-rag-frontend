@@ -12,7 +12,7 @@ export function HomeView({ onNavigate }: HomeViewProps) {
       <div className="welcome-block">
         <BrandMark />
         <p className="eyebrow">Asistente inteligente para tu empresa</p>
-        <h1>Hola, soy <span>ChattyAI</span></h1>
+        <h1>Hola, soy <span>NormIA</span></h1>
         <p className="lead">Consulta normativa, entiende tus obligaciones y toma decisiones con más claridad.</p>
         <button className="primary-button" onClick={() => onNavigate('consulta')}>
           Empezar a consultar <ArrowUp size={17} />

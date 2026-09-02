@@ -5,7 +5,6 @@ import type { AppView } from '@/shared/navigation.types'
 
 type SidebarProps = {
   active: AppView
-  open: boolean
   onNavigate: (view: AppView) => void
 }
 
@@ -15,12 +14,12 @@ const sidebarItems: { id: AppView; label: string; icon: LucideIcon }[] = [
   { id: 'diagnostico', label: 'Diagnóstico', icon: BarChart3 },
 ]
 
-export function Sidebar({ active, open, onNavigate }: SidebarProps) {
+export function Sidebar({ active, onNavigate }: SidebarProps) {
   return (
-    <aside className={open ? 'sidebar open' : 'sidebar'}>
+    <aside className="sidebar">
       <div className="sidebar-brand">
         <BrandMark small />
-        <strong>Chatty<span>AI</span></strong>
+        <strong>Norm<span>IA</span></strong>
       </div>
       <nav>
         {sidebarItems.map(({ id, label, icon: Icon }) => (
@@ -28,6 +27,7 @@ export function Sidebar({ active, open, onNavigate }: SidebarProps) {
             key={id}
             className={active === id ? 'side-link active' : 'side-link'}
             onClick={() => onNavigate(id)}
+            aria-current={active === id ? 'page' : undefined}
           >
             <Icon size={17} /> {label}
           </button>

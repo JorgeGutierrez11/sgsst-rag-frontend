@@ -3,7 +3,7 @@
 ## Project shape
 - Single Next.js app at the repository root; there are no workspace packages despite `pnpm-workspace.yaml` existing.
 - App Router entrypoints: `app/layout.tsx` wraps the app and `app/page.tsx` renders `components/layout/app-shell.tsx`.
-- `components/layout/app-shell.tsx` is the client shell for the Spanish ChattyAI UI; update visible copy in Spanish unless the product requirement says otherwise.
+- `components/layout/app-shell.tsx` is the client shell for the Spanish NormIA UI; update visible copy in Spanish unless the product requirement says otherwise.
 - Shared UI primitives live under `components/ui`; aliases come from `components.json` and `tsconfig.json` (`@/*`, `@/components`, `@/lib`, `@/components/ui`).
 
 ## Toolchain and commands

@@ -3,9 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'ChattyAI | Asistente normativo para empresas',
-  description: 'Consulta normativa y entiende las obligaciones de tu empresa con ChattyAI.',
-  generator: 'v0.app',
+  title: 'NormIA | Asistente normativo para empresas',
+  description: 'Consulta normativa y entiende las obligaciones de tu empresa con NormIA.',
 }
 
 export const viewport: Viewport = {
@@ -16,5 +15,12 @@ export const viewport: Viewport = {
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="es" className="bg-background"><body className="antialiased">{children}{process.env.NODE_ENV === 'production' && <Analytics />}</body></html>
+  return (
+    <html lang="es" className="bg-background">
+      <body className="antialiased">
+        {children}
+        {process.env.NODE_ENV === 'production' && <Analytics />}
+      </body>
+    </html>
+  )
 }
