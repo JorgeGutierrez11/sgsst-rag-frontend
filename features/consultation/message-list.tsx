@@ -1,4 +1,5 @@
 import { FileText, Sparkles, UserRound } from 'lucide-react'
+import { MarkdownMessage } from '@/features/consultation/markdown-message'
 import type { ConsultationMessage } from '@/features/consultation/consultation.types'
 
 type MessageListProps = {
@@ -13,7 +14,11 @@ export function MessageList({ messages, loading }: MessageListProps) {
         <div className={`message-row ${message.role}`} key={`${message.role}-${index}`}>
           <div className="avatar">{message.role === 'assistant' ? <Sparkles size={15} /> : <UserRound size={15} />}</div>
           <div className="message-bubble">
-            {message.content}
+            {message.role === 'assistant' ? (
+              <MarkdownMessage content={message.content} />
+            ) : (
+              <p className="plain-message">{message.content}</p>
+            )}
             {message.references && message.references.length > 0 && (
               <div className="references">
                 <p><FileText size={14} /> Fuentes consultadas</p>
