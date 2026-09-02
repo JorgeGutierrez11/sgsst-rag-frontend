@@ -50,6 +50,7 @@ export function ConsultationView() {
           role: 'assistant',
           content: response.answer,
           references: response.references,
+          chunks: response.chunks,
         },
       ])
     } catch {

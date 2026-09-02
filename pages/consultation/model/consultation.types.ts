@@ -3,6 +3,7 @@ export type ConsultationMessage = {
   role: 'user' | 'assistant'
   content: string
   references?: string[]
+  chunks?: string[]
 }
 
 export type ConsultationQueryRequest = {
@@ -13,5 +14,6 @@ export type ConsultationQueryRequest = {
 export type ConsultationQueryResponse = {
   answer: string
   references: string[]
+  chunks: string[]
   conversation_id: string
 }

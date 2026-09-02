@@ -1,7 +1,8 @@
 import { FileText, Sparkles, UserRound } from 'lucide-react'
 import { MarkdownMessage } from '@/pages/consultation/components/markdown-message'
 import type { ConsultationMessage } from '@/pages/consultation/model/consultation.types'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { ChunkReferenceModal } from './chunk-modal'
 
 type MessageListProps = {
   messages: ConsultationMessage[]
@@ -12,6 +13,7 @@ type MessageListProps = {
 export function MessageList({ messages, loading, focusedMessageId }: MessageListProps) {
   const messagesContainerRef = useRef<HTMLDivElement | null>(null)
   const focusedMessageRef = useRef<HTMLDivElement | null>(null)
+  const [activeReference, setActiveReference] = useState<{ label: string; chunk: string } | null>(null)
 
   useEffect(() => {
     const messagesContainer = messagesContainerRef.current
@@ -44,17 +46,34 @@ export function MessageList({ messages, loading, focusedMessageId }: MessageList
             ) : (
               <p className="plain-message">{message.content}</p>
             )}
-            {message.references && message.references.length > 0 && (
+            {message.references && message.references.length > 0 && message.chunks && message.chunks.length > 0 && (
               <div className="references">
                 <p><FileText size={14} /> Fuentes consultadas</p>
-                {message.references.map((reference, refIndex) => (
-                  <button key={reference}><span>{refIndex + 1}</span>{reference}</button>
-                ))}
+                {message.references.map((reference, refIndex) => {
+                  const chunk = message.chunks?.[refIndex] ?? null;
+                  return (
+                    <button
+                      key={`${reference}-${refIndex}`}
+                      type="button"
+                      disabled={!chunk}
+                      onClick={() => chunk && setActiveReference({ label: reference, chunk })}
+                    >
+                      <span>{refIndex + 1}</span>{reference}
+                    </button>
+                  )
+                })}
               </div>
             )}
           </div>
         </div>
       ))}
+      {activeReference && (
+        <ChunkReferenceModal
+          reference={activeReference.label}
+          chunk={activeReference.chunk}
+          onClose={() => setActiveReference(null)}
+        />
+      )}
       {loading && (
         <div className="message-row assistant">
           <div className="avatar"><Sparkles size={15} /></div>
