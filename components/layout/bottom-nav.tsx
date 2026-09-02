@@ -1,31 +1,23 @@
-import type { LucideIcon } from 'lucide-react'
-import { BarChart3, Home, MessageCircle } from 'lucide-react'
-import type { AppView } from '@/shared/navigation.types'
+import Link from 'next/link'
+import { navigationRoutes, type AppRouteId } from '@/shared/navigation.routes'
 
 type BottomNavProps = {
-  active: AppView
-  onNavigate: (view: AppView) => void
+  active: AppRouteId
 }
 
-const navigationItems: { id: AppView; label: string; icon: LucideIcon }[] = [
-  { id: 'home', label: 'Inicio', icon: Home },
-  { id: 'consulta', label: 'Consulta', icon: MessageCircle },
-  { id: 'diagnostico', label: 'Diagnóstico', icon: BarChart3 },
-]
-
-export function BottomNav({ active, onNavigate }: BottomNavProps) {
+export function BottomNav({ active }: BottomNavProps) {
   return (
     <nav className="bottom-nav" aria-label="Navegación principal">
-      {navigationItems.map(({ id, label, icon: Icon }) => (
-        <button
+      {navigationRoutes.map(({ id, shortLabel, href, icon: Icon }) => (
+        <Link
           key={id}
+          href={href}
           className={active === id ? 'nav-item active' : 'nav-item'}
-          onClick={() => onNavigate(id)}
           aria-current={active === id ? 'page' : undefined}
         >
           <Icon size={19} />
-          <span>{label}</span>
-        </button>
+          <span>{shortLabel}</span>
+        </Link>
       ))}
     </nav>
   )

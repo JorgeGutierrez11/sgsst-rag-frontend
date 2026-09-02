@@ -1,4 +1,5 @@
 export type ConsultationMessage = {
+  id: string
   role: 'user' | 'assistant'
   content: string
   references?: string[]

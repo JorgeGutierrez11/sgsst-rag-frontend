@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ArrowUp, Check, ChevronRight, ClipboardList, MessageCircle, Sparkles } from 'lucide-react'
-import type { DiagnosticStep } from '@/features/diagnostic/diagnostic.types'
+import type { DiagnosticStep } from '@/pages/diagnostic/diagnostic.types'
 
 const diagnosticSteps = ['Empresa', 'Preguntas', 'Revisión', 'Resultado']
 

@@ -27,7 +27,6 @@
   --focus-ring: rgba(18, 200, 149, 0.34);
   --danger: #b42318;
   --danger-soft: #fef3f2;
-  --topbar-height: 72px;
   --bottom-nav-height: 76px;
   --composer-height: 92px;
   --desktop-page-y: clamp(20px, 3vh, 36px);
@@ -86,6 +85,11 @@ input {
 button {
   cursor: pointer;
   touch-action: manipulation;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 button:focus-visible,
@@ -151,6 +155,7 @@ input:focus-visible {
   align-items: center;
   gap: 11px;
   color: var(--text-muted);
+  cursor: pointer;
   text-align: left;
   font-size: 13px;
   transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
@@ -183,11 +188,10 @@ input:focus-visible {
   min-height: 100dvh;
   margin: 0 auto;
   display: grid;
-  grid-template-rows: var(--topbar-height) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
 }
 
 .topbar {
-  height: var(--topbar-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -237,7 +241,7 @@ input:focus-visible {
 }
 
 .page-pad {
-  min-height: calc(100dvh - var(--topbar-height));
+  min-height: 100dvh;
   padding: var(--desktop-page-y) clamp(24px, 7vw, 86px);
 }
 
@@ -294,6 +298,7 @@ input:focus-visible {
   padding: 14px 22px;
   font-size: 13px;
   font-weight: 700;
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -332,6 +337,8 @@ input:focus-visible {
   display: flex;
   align-items: center;
   gap: 13px;
+  color: var(--text-body);
+  text-decoration: none;
   text-align: left;
   transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
 }
@@ -340,7 +347,7 @@ input:focus-visible {
   box-shadow: 0 10px 25px rgba(30, 50, 40, 0.06);
 }
 
-.feature-card > span:nth-child(2) {
+.feature-card>span:nth-child(2) {
   flex: 1;
 }
 
@@ -360,7 +367,7 @@ input:focus-visible {
   line-height: 1.4;
 }
 
-.feature-card > svg {
+.feature-card>svg {
   color: var(--text-subtle);
 }
 
@@ -407,8 +414,8 @@ input:focus-visible {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: clamp(12px, 2vh, 18px);
-  height: calc(100dvh - var(--topbar-height));
-  min-height: calc(100dvh - var(--topbar-height));
+  height: 100dvh;
+  min-height: 100dvh;
 }
 
 .diagnostic-view {
@@ -447,7 +454,7 @@ input:focus-visible {
   padding: 24px 20px;
 }
 
-.empty-chat > p {
+.empty-chat>p {
   color: var(--text-muted);
   max-width: 380px;
   margin: 0 auto 24px;
@@ -531,11 +538,11 @@ input:focus-visible {
   color: inherit;
 }
 
-.markdown-message > *:first-child {
+.markdown-message>*:first-child {
   margin-top: 0;
 }
 
-.markdown-message > *:last-child {
+.markdown-message>*:last-child {
   margin-bottom: 0;
 }
 
@@ -579,7 +586,7 @@ input:focus-visible {
   padding-left: 1.2rem;
 }
 
-.markdown-message li + li {
+.markdown-message li+li {
   margin-top: 6px;
 }
 
@@ -739,7 +746,7 @@ input:focus-visible {
   transform: none;
 }
 
-.composer-wrap > p {
+.composer-wrap>p {
   text-align: center;
   color: var(--text-muted);
   font-size: 0.75rem;
@@ -776,7 +783,7 @@ input:focus-visible {
   margin-bottom: 0;
 }
 
-.view-heading > p:last-child {
+.view-heading>p:last-child {
   color: var(--text-muted);
   line-height: 1.6;
   max-width: 42rem;
@@ -831,7 +838,7 @@ input:focus-visible {
 
 .diagnostic-card {
   max-width: 620px;
-  max-height: min(520px, calc(100dvh - var(--topbar-height) - 220px));
+  max-height: min(520px, 100dvh);
   overflow: auto;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -845,7 +852,7 @@ input:focus-visible {
   letter-spacing: -0.04em;
 }
 
-.diagnostic-card > p {
+.diagnostic-card>p {
   color: var(--text-muted);
   font-size: 13px;
   line-height: 1.6;
@@ -975,9 +982,6 @@ input:focus-visible {
 }
 
 @media (max-width: 700px) {
-  :root {
-    --topbar-height: 63px;
-  }
 
   .sidebar {
     display: none;
@@ -987,17 +991,16 @@ input:focus-visible {
     width: 100%;
     max-width: none;
     min-height: 100dvh;
-    grid-template-rows: var(--topbar-height) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
     padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
   }
 
   .topbar {
-    height: var(--topbar-height);
     padding: 0 16px;
   }
 
   .page-pad {
-    min-height: calc(100dvh - var(--topbar-height) - var(--bottom-nav-height) - env(safe-area-inset-bottom));
+    min-height: calc(100dvh - var(--bottom-nav-height) - env(safe-area-inset-bottom));
     padding: var(--mobile-page-y) clamp(16px, 5vw, 28px);
   }
 
@@ -1047,6 +1050,7 @@ input:focus-visible {
     display: grid;
     justify-items: center;
     gap: 4px;
+    text-decoration: none;
     font-size: 0.75rem;
     transition: color 160ms ease, transform 160ms ease;
   }
@@ -1064,8 +1068,8 @@ input:focus-visible {
   }
 
   .chat-view {
-    height: calc(100dvh - var(--topbar-height) - var(--bottom-nav-height) - env(safe-area-inset-bottom));
-    min-height: calc(100dvh - var(--topbar-height) - var(--bottom-nav-height) - env(safe-area-inset-bottom));
+    height: calc(100dvh - var(--bottom-nav-height) - env(safe-area-inset-bottom));
+    min-height: calc(100dvh - var(--bottom-nav-height) - env(safe-area-inset-bottom));
     padding-bottom: var(--mobile-page-y);
   }
 
@@ -1086,7 +1090,7 @@ input:focus-visible {
   }
 
   .diagnostic-card {
-    max-height: min(460px, calc(100dvh - var(--topbar-height) - var(--bottom-nav-height) - 180px));
+    max-height: min(460px, 100dvh - var(--bottom-nav-height) - 180px);
     padding: 24px 20px;
   }
 
@@ -1105,6 +1109,7 @@ input:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

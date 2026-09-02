@@ -1,20 +1,13 @@
-import type { LucideIcon } from 'lucide-react'
-import { BarChart3, Bot, Home, MessageCircle } from 'lucide-react'
+import Link from 'next/link'
+import { Bot } from 'lucide-react'
 import { BrandMark } from '@/components/layout/brand-mark'
-import type { AppView } from '@/shared/navigation.types'
+import { navigationRoutes, type AppRouteId } from '@/shared/navigation.routes'
 
 type SidebarProps = {
-  active: AppView
-  onNavigate: (view: AppView) => void
+  active: AppRouteId
 }
 
-const sidebarItems: { id: AppView; label: string; icon: LucideIcon }[] = [
-  { id: 'home', label: 'Inicio', icon: Home },
-  { id: 'consulta', label: 'Consulta normativa', icon: MessageCircle },
-  { id: 'diagnostico', label: 'Diagnóstico', icon: BarChart3 },
-]
-
-export function Sidebar({ active, onNavigate }: SidebarProps) {
+export function Sidebar({ active }: SidebarProps) {
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
@@ -22,15 +15,15 @@ export function Sidebar({ active, onNavigate }: SidebarProps) {
         <strong>Norm<span>IA</span></strong>
       </div>
       <nav>
-        {sidebarItems.map(({ id, label, icon: Icon }) => (
-          <button
+        {navigationRoutes.map(({ id, label, href, icon: Icon }) => (
+          <Link
             key={id}
+            href={href}
             className={active === id ? 'side-link active' : 'side-link'}
-            onClick={() => onNavigate(id)}
             aria-current={active === id ? 'page' : undefined}
           >
             <Icon size={17} /> {label}
-          </button>
+          </Link>
         ))}
       </nav>
       <div className="sidebar-foot">

@@ -1,17 +1,42 @@
 import { FileText, Sparkles, UserRound } from 'lucide-react'
-import { MarkdownMessage } from '@/features/consultation/markdown-message'
-import type { ConsultationMessage } from '@/features/consultation/consultation.types'
+import { MarkdownMessage } from '@/pages/consultation/components/markdown-message'
+import type { ConsultationMessage } from '@/pages/consultation/model/consultation.types'
+import { useEffect, useRef } from 'react'
 
 type MessageListProps = {
   messages: ConsultationMessage[]
   loading: boolean
+  focusedMessageId: string | null
 }
 
-export function MessageList({ messages, loading }: MessageListProps) {
+export function MessageList({ messages, loading, focusedMessageId }: MessageListProps) {
+  const messagesContainerRef = useRef<HTMLDivElement | null>(null)
+  const focusedMessageRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const messagesContainer = messagesContainerRef.current
+    const focusedMessage = focusedMessageRef.current
+
+    if (!messagesContainer || !focusedMessage) return
+
+    const containerBounds = messagesContainer.getBoundingClientRect()
+    const messageBounds = focusedMessage.getBoundingClientRect()
+
+    messagesContainer.scrollTo({
+      top: messagesContainer.scrollTop + messageBounds.top - containerBounds.top,
+      behavior: 'smooth',
+    })
+  }, [focusedMessageId, messages.length])
+
   return (
-    <div className="messages" aria-live="polite">
+    <div className="messages" aria-live="polite" ref={messagesContainerRef}>
       {messages.map((message, index) => (
-        <div className={`message-row ${message.role}`} key={`${message.role}-${index}`}>
+        <div
+          ref={message.id === focusedMessageId ? focusedMessageRef : null}
+          className={`message-row ${message.role}`}
+          key={`${message.role}-${index}`}
+          tabIndex={message.id === focusedMessageId ? -1 : undefined}
+        >
           <div className="avatar">{message.role === 'assistant' ? <Sparkles size={15} /> : <UserRound size={15} />}</div>
           <div className="message-bubble">
             {message.role === 'assistant' ? (
