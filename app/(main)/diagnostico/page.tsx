@@ -1,4 +1,4 @@
-import { DiagnosticView } from '@/pages/diagnostic/diagnostic-view'
+import { DiagnosticView } from '@/features/diagnostic/diagnostic-view'
 
 export default function DiagnosticPage() {
   return <DiagnosticView />

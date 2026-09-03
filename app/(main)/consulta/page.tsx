@@ -1,4 +1,4 @@
-import { ConsultationView } from '@/pages/consultation/consultation-view'
+import { ConsultationView } from '@/features/consultation/consultation-view'
 
 export default function ConsultationPage() {
   return <ConsultationView />
