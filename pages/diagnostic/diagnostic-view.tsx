@@ -2,18 +2,18 @@
 
 import { useState } from 'react'
 import { ArrowUp, Check, ChevronRight, ClipboardList, MessageCircle, Sparkles } from 'lucide-react'
-import type { DiagnosticStep } from '@/features/diagnostic/diagnostic.types'
+import type { DiagnosticStep } from '@/pages/diagnostic/diagnostic.types'
 
 const diagnosticSteps = ['Empresa', 'Preguntas', 'Revisión', 'Resultado']
-const choiceButtonClassName = 'flex items-center justify-between rounded-xl border border-borde-light bg-capa-main p-3 text-left text-[13px] text-txt-medium transition-[color,background-color,border-color,transform] hover:-translate-y-0.5 hover:border-brand-primary hover:text-brand-dark active:translate-y-0'
-const secondaryButtonClassName = 'rounded-full border border-borde-light bg-capa-surface px-4 py-3 text-xs text-txt-medium transition-[color,background-color,border-color,transform,box-shadow] hover:-translate-y-0.5 hover:border-borde-gray hover:shadow-soft active:translate-y-0'
+const choiceButtonClassName = 'flex items-center justify-between rounded-control border border-borde-light bg-capa-main p-3 text-left text-[13px] text-txt-medium transition-[color,background-color,border-color,transform,box-shadow] hover:-translate-y-0.5 hover:border-brand-primary/45 hover:bg-capa-surface hover:text-brand-dark hover:shadow-soft active:translate-y-0'
+const secondaryButtonClassName = 'rounded-full border border-white/70 bg-capa-surface px-4 py-3 text-xs text-txt-medium shadow-sm transition-[color,background-color,border-color,transform,box-shadow] hover:-translate-y-0.5 hover:border-brand-primary/35 hover:shadow-soft active:translate-y-0'
 
 export function DiagnosticView() {
   const [step, setStep] = useState<DiagnosticStep>(1)
   const goBack = () => setStep((currentStep) => Math.max(1, currentStep - 1) as DiagnosticStep)
 
   return (
-    <section className="mx-auto grid min-h-[calc(100dvh-var(--bottom-nav-height)-env(safe-area-inset-bottom))] w-full max-w-205 content-center gap-[clamp(12px,2vh,20px)] px-[clamp(16px,5vw,86px)] py-(--mobile-page-y) md:min-h-dvh md:py-(--desktop-page-y)">
+    <section className="mx-auto grid min-h-[calc(100dvh-var(--bottom-nav-height)-env(safe-area-inset-bottom)-24px)] w-full max-w-205 content-center gap-[clamp(12px,2vh,20px)] px-[clamp(16px,5vw,86px)] py-(--mobile-page-y) md:min-h-[calc(100dvh-32px)] md:py-(--desktop-page-y)">
       <div className="grid gap-1.5">
         <p className="m-0 mb-3 text-xs font-bold uppercase tracking-[0.08em] text-txt-muted">
           Diagnóstico guiado
@@ -49,7 +49,7 @@ export function DiagnosticView() {
               <span
                 className={
                   stepNumber <= step
-                    ? 'grid size-8 place-items-center rounded-full border border-brand-primary bg-brand-primary text-brand-text'
+                    ? 'grid size-8 place-items-center rounded-full border border-brand-primary bg-brand-primary text-brand-text shadow-[0_0_0_6px_hsl(var(--brand-primary)/0.10)]'
                     : 'grid size-8 place-items-center rounded-full border border-borde-light bg-capa-main text-txt-subtle'
                 }
               >
@@ -71,7 +71,7 @@ export function DiagnosticView() {
         </button>
       )}
 
-      <div className="max-h-[min(460px,calc(100dvh-var(--bottom-nav-height)-180px))] max-w-155 overflow-auto rounded-[20px] border border-borde-light bg-capa-surface p-5 md:max-h-[min(520px,100dvh)] md:p-8">
+      <div className="max-h-[min(460px,calc(100dvh-var(--bottom-nav-height)-180px))] max-w-155 overflow-auto rounded-card border border-white/70 bg-capa-surface p-5 shadow-panel md:max-h-[min(520px,100dvh)] md:p-8">
         {step === 1 && (
           <>
             <span className="grid size-11 place-items-center rounded-[13px] bg-brand-light text-brand-primary">

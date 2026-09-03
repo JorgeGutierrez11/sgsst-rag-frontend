@@ -51,12 +51,17 @@ const config: Config = {
         },
       },
       boxShadow: {
+        panel: '0 18px 48px hsl(var(--shadow-soft) / 0.10)',
         soft: '0 10px 25px hsl(var(--shadow-soft) / 0.08)',
+        glow: '0 0 0 8px hsl(var(--shadow-brand) / 0.08), 0 18px 60px hsl(var(--shadow-brand) / 0.22)',
         button: '0 8px 18px hsl(var(--brand-primary) / 0.18)',
         modal: '0 20px 48px hsl(var(--shadow-strong) / 0.14), 0 4px 12px hsl(var(--shadow-strong) / 0.08)',
       },
       borderRadius: {
         app: 'var(--radius-app)',
+        panel: 'var(--radius-panel)',
+        card: 'var(--radius-card)',
+        control: 'var(--radius-control)',
       },
     },
   },

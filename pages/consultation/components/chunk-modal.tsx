@@ -1,6 +1,6 @@
 import { FileText, X } from 'lucide-react'
 import { useEffect, useRef } from 'react'
-import { MarkdownMessage } from '@/features/consultation/components/markdown-message'
+import { MarkdownMessage } from '@/pages/consultation/components/markdown-message'
 
 type ChunkReferenceModalProps = {
   reference: string
@@ -30,30 +30,30 @@ export function ChunkReferenceModal({ reference, chunk, onClose }: ChunkReferenc
 
   return (
     <div
-      className="fixed inset-0 z-1000 flex items-end justify-center bg-[hsl(var(--shadow-strong)/0.45)] p-4 backdrop-blur overscroll-contain md:items-center md:p-6"
+      className="fixed inset-0 z-1000 flex items-end justify-center bg-[hsl(var(--shadow-strong)/0.35)] p-4 backdrop-blur overscroll-contain md:items-center md:p-6"
       role="presentation"
       onClick={onClose}
     >
       <div
-        className="flex max-h-[calc(90dvh-var(--bottom-nav-height))] w-full max-w-160 flex-col rounded-[14px] border border-borde-light bg-capa-surface shadow-modal md:max-h-[80dvh] md:rounded-[18px]"
+        className="flex max-h-[calc(90dvh-var(--bottom-nav-height))] w-full max-w-170 flex-col overflow-auto rounded-panel border border-white/70 bg-capa-surface shadow-panel md:max-h-[80dvh]"
         role="dialog"
         aria-modal="true"
         aria-labelledby="chunk-modal-title"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="flex items-center justify-between gap-3 rounded-t-[14px] border-b border-borde-light bg-capa-soft py-3.5 pr-4 pl-4.5 md:rounded-t-[18px]">
+        <div className="flex items-center justify-between gap-3 rounded-tl-(--radius-panel) rounded-tr-(--radius-panel) border-borde-light bg-capa-main/70 py-3.5 pr-4 pl-4.5">
           <p
             id="chunk-modal-title"
             className="m-0 flex min-w-0 items-center gap-1.75 truncate text-[13px] font-bold text-txt-bold"
           >
-            <FileText className="shrink-0 text-brand-primary" size={14} />
+            <FileText className="shrink-0 text-brand-primary" size={14} aria-hidden="true" />
             {reference}
           </p>
 
           <button
             ref={closeButtonRef}
             type="button"
-            className="shrink-0 rounded-lg p-1.5 leading-none text-txt-muted transition-[background-color,color] hover:bg-capa-muted hover:text-txt-bold"
+            className="shrink-0 rounded-full p-1.5 leading-none text-txt-muted transition-[background-color,color] hover:bg-capa-muted hover:text-txt-bold"
             onClick={onClose}
             aria-label="Cerrar"
           >

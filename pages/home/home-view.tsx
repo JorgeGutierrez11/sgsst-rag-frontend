@@ -2,10 +2,13 @@ import Link from 'next/link'
 import { ArrowUp, Check, ChevronRight, ClipboardList, MessageCircle } from 'lucide-react'
 import { BrandMark } from '@/components/layout/brand-mark'
 
+const homeActionCardClassName = 'flex min-w-0 items-center gap-3 rounded-card border border-white/70 bg-capa-surface p-4 text-left text-txt-medium shadow-soft transition-[color,background-color,border-color,transform,box-shadow] hover:-translate-y-0.5 hover:border-brand-primary/30 hover:shadow-panel active:translate-y-0 md:p-5'
+
 export function HomeView() {
   return (
-    <section className="mx-auto grid min-h-[calc(100dvh-var(--bottom-nav-height)-env(safe-area-inset-bottom))] w-full max-w-212.5 content-center gap-[clamp(18px,3vh,28px)] px-[clamp(16px,5vw,86px)] py-(--mobile-page-y) md:min-h-dvh md:py-(--desktop-page-y)">
-      <div className="mx-auto grid max-w-137.5 justify-items-center gap-[clamp(10px,1.8vh,18px)] text-center max-md:gap-3">
+    <section className="relative mx-auto grid min-h-[calc(100dvh-var(--bottom-nav-height)-env(safe-area-inset-bottom)-24px)] w-full max-w-212.5 content-center gap-[clamp(18px,3vh,28px)] overflow-hidden px-[clamp(16px,5vw,86px)] py-(--mobile-page-y) md:min-h-[calc(100dvh-32px)] md:py-(--desktop-page-y)">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,hsl(var(--glow-primary)/0.14),transparent_62%)]" aria-hidden="true" />
+      <div className="relative mx-auto grid max-w-137.5 justify-items-center gap-[clamp(10px,1.8vh,18px)] text-center max-md:gap-3">
         <BrandMark />
 
         <p className="m-0 mb-3 text-xs font-bold uppercase tracking-[0.08em] text-txt-muted">
@@ -28,7 +31,7 @@ export function HomeView() {
           <ArrowUp className="rotate-45" size={17} />
         </Link>
       </div>
-      <div>
+      <div className="relative">
         <div>
           <p className="m-0 mb-3 text-xs font-bold uppercase tracking-[0.08em] text-txt-muted">
             Todo en un solo lugar
@@ -38,9 +41,9 @@ export function HomeView() {
           </h2>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-[clamp(10px,1.6vh,16px)] md:grid-cols-2">
+      <div className="relative grid grid-cols-1 gap-[clamp(10px,1.6vh,16px)] md:grid-cols-2">
         <Link
-          className="flex min-w-0 items-center gap-3 rounded-[17px] border border-borde-light bg-capa-surface p-4 text-left text-txt-medium transition-[color,background-color,border-color,transform,box-shadow] hover:-translate-y-0.5 hover:border-borde-gray hover:shadow-soft active:translate-y-0 md:p-5"
+          className={homeActionCardClassName}
           href="/consulta"
         >
           <span className="grid h-10 min-w-10 place-items-center rounded-xl bg-brand-light text-brand-dark">
@@ -57,7 +60,7 @@ export function HomeView() {
           <ChevronRight className="text-txt-subtle" size={18} />
         </Link>
         <Link
-          className="flex min-w-0 items-center gap-3 rounded-[17px] border border-borde-light bg-capa-surface p-4 text-left text-txt-medium transition-[color,background-color,border-color,transform,box-shadow] hover:-translate-y-0.5 hover:border-borde-gray hover:shadow-soft active:translate-y-0 md:p-5"
+          className={homeActionCardClassName}
           href="/diagnostico"
         >
           <span className="grid h-10 min-w-10 place-items-center rounded-xl bg-capa-muted text-txt-medium">
@@ -75,7 +78,7 @@ export function HomeView() {
           <ChevronRight className="text-txt-subtle" size={18} />
         </Link>
       </div>
-      <div className="flex items-center justify-center gap-1.75 text-xs text-txt-muted">
+      <div className="relative flex items-center justify-center gap-1.75 text-xs text-txt-muted">
         <Check className="text-brand-primary" size={15} />
         Respuestas fundamentadas en fuentes oficiales
       </div>

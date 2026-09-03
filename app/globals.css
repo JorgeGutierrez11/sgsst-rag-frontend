@@ -8,28 +8,28 @@
   scroll-behavior: smooth;
 
   /* Backgrounds */
-  --bg-main: 120 5% 96%;
-  --bg-surface: 0 0% 97%;
-  --bg-soft: 240 7% 97%;
-  --bg-muted: 150 5% 93%;
+  --bg-main: 220 16% 96%;
+  --bg-surface: 0 0% 100%;
+  --bg-soft: 220 5% 92%;
+  --bg-muted: 160 72% 94%;
 
   /* Brand */
-  --brand-primary: 163 83% 42%;
-  --brand-dark: 164 80% 33%;
-  --brand-light: 162 32% 92%;
-  --brand-text: 0 0% 100%;
+  --brand-primary: 160 100% 45%;
+  --brand-dark: 160 100% 42%;
+  --brand-light: 160 100% 92%;
+  --brand-text: 221 39% 11%;
 
   /* Borders */
-  --borde-light: 140 6% 89%;
-  --borde-gray: 150 5% 85%;
-  --borde-strong: 144 4% 77%;
+  --borde-light: 220 13% 91%;
+  --borde-gray: 220 12% 86%;
+  --borde-strong: 220 10% 76%;
 
   /* Text */
-  --txt-main: 150 3% 13%;
-  --txt-bold: 180 1% 14%;
-  --txt-medium: 146 3% 46%;
-  --txt-muted: 144 2% 52%;
-  --txt-subtle: 150 4% 67%;
+  --txt-main: 221 39% 11%;
+  --txt-bold: 222 47% 8%;
+  --txt-medium: 215 16% 35%;
+  --txt-muted: 220 9% 46%;
+  --txt-subtle: 215 12% 56%;
 
   /* Status */
   --error-main: 4 76% 40%;
@@ -42,11 +42,16 @@
   --success-light: 162 32% 92%;
 
   /* Focus / shadows */
-  --focus-ring: 163 83% 42%;
-  --shadow-soft: 150 4% 18%;
+  --focus-ring: 160 100% 42%;
+  --glow-primary: 160 100% 45%;
+  --shadow-soft: 220 20% 35%;
+  --shadow-brand: 160 100% 45%;
   --shadow-strong: 150 5% 8%;
 
   --radius-app: 1rem;
+  --radius-panel: 28px;
+  --radius-card: 24px;
+  --radius-control: 18px;
   --bottom-nav-height: 76px;
   --composer-height: 92px;
   --desktop-page-y: clamp(20px, 3vh, 36px);
@@ -85,7 +90,9 @@
   --color-status-warning-light: hsl(var(--warning-light));
   --color-status-success-main: hsl(var(--success-main));
   --color-status-success-light: hsl(var(--success-light));
+  --shadow-panel: 0 18px 48px hsl(var(--shadow-soft) / 0.10);
   --shadow-soft: 0 10px 25px hsl(var(--shadow-soft) / 0.08);
+  --shadow-glow: 0 0 0 8px hsl(var(--shadow-brand) / 0.08), 0 18px 60px hsl(var(--shadow-brand) / 0.22);
   --shadow-button: 0 8px 18px hsl(var(--brand-primary) / 0.18);
   --shadow-modal: 0 20px 48px hsl(var(--shadow-strong) / 0.14), 0 4px 12px hsl(var(--shadow-strong) / 0.08);
   --radius-lg: var(--radius-app);
@@ -176,7 +183,8 @@ body {
 }
 
 button,
-input {
+input,
+textarea {
   font: inherit;
 }
 
@@ -192,7 +200,8 @@ a {
 
 button:focus-visible,
 a:focus-visible,
-input:focus-visible {
+input:focus-visible,
+textarea:focus-visible {
   outline: 3px solid hsl(var(--focus-ring) / 0.34);
   outline-offset: 3px;
 }
