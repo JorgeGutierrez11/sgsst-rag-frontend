@@ -80,7 +80,7 @@ export function MessageList({ messages, loading, focusedMessageId }: MessageList
               message.references.length > 0 &&
               message.chunks &&
               message.chunks.length > 0 && (
-                <div className="mt-3.25 grid gap-2 border-t border-borde-light pt-2.5">
+                <div className="mt-3.25 border-t border-borde-light pt-2.5">
                   <p className="m-0 mb-1.75 flex items-center gap-1.5 text-xs font-bold text-txt-muted">
                     <FileText size={14} aria-hidden="true" />
                     Fuentes consultadas
@@ -91,15 +91,14 @@ export function MessageList({ messages, loading, focusedMessageId }: MessageList
                       <button
                         key={`${reference}-${refIndex}`}
                         type="button"
-                        className="flex min-h-11 w-full items-start gap-2.5 rounded-xs border border-borde-light bg-capa-main px-3 py-2.5 text-left text-xs font-medium leading-5 text-txt-muted shadow-sm transition-[border-color,color,background-color] hover:border-brand-primary/40 hover:text-brand-dark disabled:cursor-not-allowed disabled:opacity-60 md:mt-1 md:inline-flex md:min-h-0 md:w-auto md:max-w-full md:items-center md:gap-2 md:rounded-[5px] md:p-px md:pl-1.5 md:text-[11px] md:leading-normal wrap-anywhere"
+                        className="mt-1 inline-flex max-w-full items-center gap-2 rounded-[5px] border border-borde-light bg-capa-main p-px pl-1.5 text-left font-medium text-txt-muted transition-colors hover:border-brand-primary/40 hover:text-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
                         disabled={!chunk}
                         onClick={() => chunk && setActiveReference({ label: reference, chunk })}
                       >
-                        <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-brand-primary text-[10px] leading-none text-brand-text md:mt-0 md:size-4.25">
+                        <span className="inline-flex size-4.25 shrink-0 items-center justify-center rounded-full bg-brand-primary text-[9px] leading-none text-brand-text">
                           {refIndex + 1}
                         </span>
-
-                        <span className="min-w-0 flex-1">
+                        <span className="wrap-anywhere text-[12px] leading-none">
                           {reference}
                         </span>
                       </button>

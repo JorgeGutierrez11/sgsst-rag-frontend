@@ -62,23 +62,26 @@ export function ConsultationView() {
 
   return (
     <section className="mx-auto grid h-[calc(100dvh-var(--bottom-nav-height)-env(safe-area-inset-bottom)-24px)] min-h-0 w-full grid-rows-[minmax(0,1fr)_auto] px-[clamp(16px,5vw,86px)] pt-0 pb-(--mobile-page-y) md:h-[calc(100dvh-32px)] md:max-w-230 md:pb-(--desktop-page-y)">
-      <div className="min-h-0 overflow-y-auto overscroll-contain">
-        <div className="grid min-h-full grid-rows-[auto_minmax(0,1fr)_auto] gap-[clamp(12px,2vh,18px)] pt-(--mobile-page-y) md:pt-(--desktop-page-y)">
+      <div className="min-h-0 overflow-hidden">
+        <div className="grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-[clamp(12px,2vh,18px)] pt-(--mobile-page-y) md:pt-(--desktop-page-y)">
           {messages.length > 0 && (
             <div className="flex items-center gap-3.25">
               <div className="grid size-11 place-items-center rounded-[13px] bg-brand-light text-brand-primary shadow-soft">
                 <MessageCircle size={22} />
               </div>
+
               <div>
                 <p className="m-0 mb-1.25 text-xs font-bold uppercase tracking-[0.08em] text-txt-muted">
                   Consulta normativa
                 </p>
+
                 <h1 className="m-0 text-[23px] tracking-tighter text-balance max-md:text-[22px]">
                   ¿Qué necesitas saber?
                 </h1>
               </div>
             </div>
           )}
+
           {messages.length === 0 ? (
             <div className="relative grid min-h-0 place-items-center overflow-hidden px-2 py-6">
               <div
@@ -125,13 +128,16 @@ export function ConsultationView() {
               focusedMessageId={focusedMessageId}
             />
           )}
+
           {error && (
             <p
               className="flex items-center gap-1.75 rounded-xl bg-status-error-light px-3 py-2.5 text-xs text-status-error-main"
               role="alert"
             >
               <Info size={15} />
+
               {error}
+
               <button
                 className="ml-auto text-inherit"
                 onClick={() => setError('')}
@@ -143,6 +149,7 @@ export function ConsultationView() {
           )}
         </div>
       </div>
+
       <ConsultationComposer
         input={input}
         loading={loading}
