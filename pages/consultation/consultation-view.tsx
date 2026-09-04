@@ -62,7 +62,7 @@ export function ConsultationView() {
 
   return (
     <section className="mx-auto grid h-[calc(100dvh-var(--bottom-nav-height)-env(safe-area-inset-bottom)-24px)] min-h-0 w-full grid-rows-[minmax(0,1fr)_auto] px-[clamp(16px,5vw,86px)] pt-0 pb-(--mobile-page-y) md:h-[calc(100dvh-32px)] md:max-w-230 md:pb-(--desktop-page-y)">
-      <div className="min-h-0 overflow-y-auto overscroll-contain bg-amber-950">
+      <div className="min-h-0 overflow-y-auto overscroll-contain">
         <div className="grid min-h-full grid-rows-[auto_minmax(0,1fr)_auto] gap-[clamp(12px,2vh,18px)] pt-(--mobile-page-y) md:pt-(--desktop-page-y)">
           {messages.length > 0 && (
             <div className="flex items-center gap-3.25">
@@ -104,7 +104,7 @@ export function ConsultationView() {
                   {consultationExamples.map((example) => (
                     <button
                       key={example}
-                      className="flex w-full items-center justify-between gap-2 rounded-full border border-white/80 bg-capa-surface px-3 py-1.5 text-left text-[11px] font-semibold text-txt-medium shadow-xs transition-[color,box-shadow,transform] hover:text-brand-dark hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
+                      className="flex w-full items-center justify-between gap-2 rounded-lg border border-white/80 bg-capa-surface px-3 py-1.5 text-left text-[11px] font-semibold text-txt-medium shadow-xs transition-[color,box-shadow,transform] hover:text-brand-dark hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-60 md:w-auto md:rounded-full"
                       onClick={() => send(example)}
                       disabled={loading}
                     >
