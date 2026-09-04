@@ -10,25 +10,21 @@ export function HomeView() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,hsl(var(--glow-primary)/0.14),transparent_62%)]" aria-hidden="true" />
       <div className="relative mx-auto grid max-w-137.5 justify-items-center gap-[clamp(10px,1.8vh,18px)] text-center max-md:gap-3">
         <BrandMark />
-
         <p className="m-0 mb-3 text-xs font-bold uppercase tracking-[0.08em] text-txt-muted">
           Asistente inteligente para tu empresa
         </p>
-
         <h1 className="m-0 text-[clamp(2rem,7vw,3rem)] leading-[1.04] tracking-[-0.06em] text-balance max-md:text-[clamp(2rem,9vw,2.35rem)]">
           Hola, soy <span className="text-brand-primary">NormIA</span>
         </h1>
-
         <p className="mx-auto m-0 max-w-2xl text-[15px] leading-[1.7] text-txt-muted text-pretty max-md:text-[13px]">
           Consulta normativa, entiende tus obligaciones y toma decisiones con más claridad.
         </p>
-
         <Link
-          className="inline-flex items-center justify-center gap-2.5 rounded-full bg-brand-primary px-5 py-3.5 text-[13px] font-bold text-brand-text shadow-button transition-[color,background-color,transform,box-shadow] hover:-translate-y-0.5 hover:bg-brand-dark active:translate-y-0"
+          className="inline-flex items-center justify-center gap-2.5 rounded-full bg-brand-dark/45 px-5 py-3.5 text-[13px] font-semibold text-brand-text/70 shadow-xs transition-[background-color,transform] hover:-translate-y-0.5 active:translate-y-0"
           href="/consulta"
         >
           Empezar a consultar
-          <ArrowUp className="rotate-45" size={17} />
+          <ArrowUp className="rotate-45 opacity-70" size={17} />
         </Link>
       </div>
       <div className="relative">
