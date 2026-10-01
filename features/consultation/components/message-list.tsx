@@ -1,6 +1,6 @@
 import { FileText, Sparkles, UserRound } from 'lucide-react'
-import { MarkdownMessage } from '@/pages/consultation/components/markdown-message'
-import type { ConsultationMessage } from '@/pages/consultation/model/consultation.types'
+import { MarkdownMessage } from '@/features/consultation/components/markdown-message'
+import type { ConsultationMessage } from '@/features/consultation/model/consultation.types'
 import { useEffect, useRef, useState } from 'react'
 import { ChunkReferenceModal } from './chunk-modal'
 

@@ -1,4 +1,4 @@
-import type { ConsultationQueryRequest, ConsultationQueryResponse } from '@/pages/consultation/model/consultation.types'
+import type { ConsultationQueryRequest, ConsultationQueryResponse } from '@/features/consultation/model/consultation.types'
 
 const CONSULTATION_API_URL = 'http://127.0.0.1:8000/api/v1/query'
 

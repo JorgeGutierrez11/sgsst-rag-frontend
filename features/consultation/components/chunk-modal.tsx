@@ -1,6 +1,6 @@
 import { FileText, X } from 'lucide-react'
 import { useEffect, useRef } from 'react'
-import { MarkdownMessage } from '@/pages/consultation/components/markdown-message'
+import { MarkdownMessage } from '@/features/consultation/components/markdown-message'
 
 type ChunkReferenceModalProps = {
   reference: string

@@ -2,11 +2,11 @@
 
 import { useState } from 'react'
 import { ArrowUp, Info, MessageCircle, X } from 'lucide-react'
-import { queryConsultation } from '@/pages/consultation/api/consultation-api'
-import { ConsultationComposer } from '@/pages/consultation/components/consultation-composer'
-import type { ConsultationMessage } from '@/pages/consultation/model/consultation.types'
-import { consultationExamples } from '@/pages/consultation/model/examples'
-import { MessageList } from '@/pages/consultation/components/message-list'
+import { queryConsultation } from '@/features/consultation/api/consultation-api'
+import { ConsultationComposer } from '@/features/consultation/components/consultation-composer'
+import type { ConsultationMessage } from '@/features/consultation/model/consultation.types'
+import { consultationExamples } from '@/features/consultation/model/examples'
+import { MessageList } from '@/features/consultation/components/message-list'
 
 export function ConsultationView() {
   const [messages, setMessages] = useState<ConsultationMessage[]>([])
