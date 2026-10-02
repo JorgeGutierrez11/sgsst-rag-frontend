@@ -73,7 +73,7 @@ cd sgsst-rag-frontend
 Instalar las dependencias:
 
 ```bash
-pnpm install
+npm install
 ```
 
 Este comando instala las dependencias declaradas en `package.json`, incluyendo Next.js, React, TypeScript, Tailwind CSS, Lucide y las demás librerías utilizadas por el proyecto.
@@ -119,7 +119,7 @@ Terminal 3 → Frontend :3000
 Desde la raíz del repositorio:
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
 Abrir en el navegador:
@@ -142,7 +142,7 @@ http://localhost:3000/diagnostico
 Antes de trabajar o después de realizar cambios importantes, se puede validar el proyecto con:
 
 ```bash
-pnpm exec tsc --noEmit
+npm exec tsc --noEmit
 ```
 
 Si el comando termina sin mostrar errores, la comprobación de tipos fue satisfactoria.
@@ -174,22 +174,10 @@ Para el entorno local actual no es necesario configurar esta variable mientras e
 
 ---
 
-## 8. Ejecuciones posteriores
-
-La instalación de dependencias solo es necesaria la primera vez o cuando cambia `package.json` o `pnpm-lock.yaml`.
-
-Para iniciar nuevamente el frontend:
-
-```bash
-cd sgsst-rag-frontend
-pnpm dev
-```
-
----
 
 ## 9. Problemas frecuentes
 
-### `pnpm: command not found`
+### `npm: command not found`
 
 Habilitar Corepack:
 
@@ -227,47 +215,5 @@ Verificar que el Agente 2 esté ejecutándose:
 curl http://127.0.0.1:8001/api/v1/diagnostics/health
 ```
 
-### Cambios del favicon no aparecen
 
-Los navegadores suelen mantener el favicon en caché. Reiniciar el servidor si es necesario:
 
-```bash
-rm -rf .next
-pnpm dev
-```
-
-y realizar una recarga fuerte del navegador.
-
----
-
-## 10. Compilación de producción
-
-Para comprobar que el frontend puede compilarse:
-
-```bash
-pnpm build
-```
-
-Para ejecutar una compilación ya generada:
-
-```bash
-pnpm start
-```
-
-Durante el desarrollo cotidiano debe utilizarse:
-
-```bash
-pnpm dev
-```
-
----
-
-## 11. Detener el frontend
-
-En la terminal donde está ejecutándose Next.js:
-
-```text
-Ctrl + C
-```
-
-Esto detiene el servidor de desarrollo.
