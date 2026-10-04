@@ -7,58 +7,19 @@ import { ConsultationComposer } from '@/features/consultation/components/consult
 import type { ConsultationMessage } from '@/features/consultation/model/consultation.types'
 import { consultationExamples } from '@/features/consultation/model/examples'
 import { MessageList } from '@/features/consultation/components/message-list'
+import { useConsultationSession } from '@/features/consultation/hooks/use-consultation-session'
 
 export function ConsultationView() {
-  const [messages, setMessages] = useState<ConsultationMessage[]>([])
-  const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [conversationId, setConversationId] = useState(() => crypto.randomUUID())
-  const [focusedMessageId, setFocusedMessageId] = useState<string | null>(null)
-
-  const send = async (text = input) => {
-    const question = text.trim()
-    const userMessageId = crypto.randomUUID()
-
-    if (!question || loading) return
-
-    setInput('')
-    setError('')
-
-    setFocusedMessageId(userMessageId)
-    setMessages((current) => [
-      ...current,
-      {
-        id: userMessageId,
-        role: 'user',
-        content: question
-      }
-    ])
-    setLoading(true)
-
-    try {
-      const response = await queryConsultation({
-        question,
-        conversation_id: conversationId,
-      })
-
-      setConversationId(response.conversation_id)
-      setMessages((current) => [
-        ...current,
-        {
-          id: crypto.randomUUID(),
-          role: 'assistant',
-          content: response.answer,
-          references: response.references,
-          chunks: response.chunks,
-        },
-      ])
-    } catch {
-      setError('No pudimos obtener una respuesta de la API. Intenta nuevamente cuando el servicio esté disponible.')
-    } finally {
-      setLoading(false)
-    }
-  }
+  const {
+    messages,
+    input,
+    loading,
+    error,
+    focusedMessageId,
+    setInput,
+    send,
+    clearSession
+  } = useConsultationSession()
 
   return (
     <section className="mx-auto grid h-[calc(100dvh-var(--bottom-nav-height)-env(safe-area-inset-bottom)-24px)] min-h-0 w-full grid-rows-[minmax(0,1fr)_auto] px-[clamp(16px,5vw,86px)] pt-0 pb-(--mobile-page-y) md:h-[calc(100dvh-32px)] md:max-w-230 md:pb-(--desktop-page-y)">
@@ -140,7 +101,7 @@ export function ConsultationView() {
 
               <button
                 className="ml-auto text-inherit"
-                onClick={() => setError('')}
+                onClick={() => clearSession()}
                 aria-label="Cerrar error"
               >
                 <X size={14} />
