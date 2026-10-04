@@ -99,7 +99,7 @@
   --radius-app: 1rem;
 }
 
-/* @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
   :root {
     --bg-main: 220 15% 5%;
     --bg-surface: 220 12% 10%;
@@ -128,7 +128,7 @@
     --success-main: 142 70% 55%;
     --success-light: 142 70% 12%;
   }
-} */
+}
 
 .dark {
   color-scheme: dark;
