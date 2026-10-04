@@ -3,6 +3,7 @@ import { MarkdownMessage } from '@/features/consultation/components/markdown-mes
 import type { ConsultationMessage } from '@/features/consultation/model/consultation.types'
 import { useEffect, useRef, useState } from 'react'
 import { ChunkReferenceModal } from './chunk-modal'
+import { AssistantLoading } from './messageLoading'
 
 type MessageListProps = {
   messages: ConsultationMessage[]
@@ -119,22 +120,7 @@ export function MessageList({ messages, loading, focusedMessageId }: MessageList
       )}
 
       {loading && (
-        <div className="flex items-start gap-2.5">
-          <div className="grid size-7 shrink-0 place-items-center rounded-full bg-brand-light text-brand-primary shadow-sm">
-            <Sparkles size={15} aria-hidden="true" />
-          </div>
-
-          <span className="sr-only">NormIA está preparando la respuesta.</span>
-
-          <div
-            className="flex gap-1 rounded-[22px] rounded-tl-md border border-white/70 bg-capa-surface p-4.5 shadow-sm"
-            aria-hidden="true"
-          >
-            <span className="size-1.25 animate-bounce rounded-full bg-txt-subtle" />
-            <span className="size-1.25 animate-bounce rounded-full bg-txt-subtle [animation-delay:150ms]" />
-            <span className="size-1.25 animate-bounce rounded-full bg-txt-subtle [animation-delay:300ms]" />
-          </div>
-        </div>
+        <AssistantLoading />
       )}
     </div>
   )

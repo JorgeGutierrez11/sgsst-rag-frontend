@@ -6,7 +6,7 @@ const homeActionCardClassName = 'flex min-w-0 items-center gap-3 rounded-card bo
 
 export function HomeView() {
   return (
-    <section className="relative mx-auto grid min-h-[calc(100dvh-var(--bottom-nav-height)-env(safe-area-inset-bottom)-24px)] w-full max-w-212.5 content-center gap-[clamp(18px,3vh,28px)] overflow-hidden px-[clamp(16px,5vw,86px)] py-(--mobile-page-y) md:min-h-[calc(100dvh-32px)] md:py-(--desktop-page-y)">
+    <section className="h-screen overflow-hidden relative mx-auto grid min-h-[calc(100dvh-var(--bottom-nav-height)-env(safe-area-inset-bottom)-24px)] w-full max-w-212.5 content-center gap-[clamp(18px,3vh,28px)] px-[clamp(16px,5vw,86px)] py-(--mobile-page-y) md:min-h-[calc(100dvh-32px)] md:py-(--desktop-page-y)">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,hsl(var(--glow-primary)/0.14),transparent_62%)]" aria-hidden="true" />
       <div className="relative mx-auto grid max-w-137.5 justify-items-center gap-[clamp(10px,1.8vh,18px)] text-center max-md:gap-3">
         <BrandMark />
