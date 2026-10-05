@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import type { FormEvent } from 'react'
 import {
   Check,
   ClipboardList,
@@ -12,275 +10,29 @@ import {
   X,
 } from 'lucide-react'
 
-import {
-  completeDiagnostic,
-  createDiagnostic,
-  getDiagnosticReport,
-  submitDiagnosticAnswer,
-} from '@/features/diagnostic/api/diagnostic-api'
-
-import type {
-  CompleteDiagnosticResponse,
-  DiagnosticAnswer,
-  DiagnosticQuestion,
-} from '@/features/diagnostic/diagnostic.types'
+import { useDiagnosticSession } from '@/features/diagnostic/hooks/use-diagnostic-session'
 
 export function DiagnosticView() {
-  const [workerCount, setWorkerCount] = useState('')
-
-  const [diagnosisId, setDiagnosisId] =
-    useState<string | null>(null)
-
-  const [catalogName, setCatalogName] =
-    useState<string | null>(null)
-
-  const [currentQuestion, setCurrentQuestion] =
-    useState<DiagnosticQuestion | null>(null)
-
-  const [textAnswer, setTextAnswer] = useState('')
-
-  const [result, setResult] =
-    useState<CompleteDiagnosticResponse | null>(null)
-
-  const [clarificationMessage, setClarificationMessage] =
-    useState<string | null>(null)
-
-  const [isStarting, setIsStarting] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const [errorMessage, setErrorMessage] =
-    useState<string | null>(null)
-
-  const [reportBlob, setReportBlob] =
-    useState<Blob | null>(null)
-
-  const [isDownloadingReport, setIsDownloadingReport] =
-    useState(false)
-
-  const [reportError, setReportError] =
-    useState<string | null>(null)
-
-  const [toastMessage, setToastMessage] =
-    useState<string | null>(null)
-
-  const toastTimeoutRef =
-    useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  useEffect(() => {
-    return () => {
-      if (toastTimeoutRef.current) {
-        clearTimeout(toastTimeoutRef.current)
-      }
-    }
-  }, [])
-
-  const showAnswerToast = () => new Promise<void>((resolve) => {
-    if (toastTimeoutRef.current) {
-      clearTimeout(toastTimeoutRef.current)
-    }
-
-    setToastMessage('Respuesta registrada')
-
-    toastTimeoutRef.current = setTimeout(() => {
-      setToastMessage(null)
-      toastTimeoutRef.current = null
-      resolve()
-    }, 2200)
-  })
-
-  const handleStartDiagnostic = async (
-    event: FormEvent<HTMLFormElement>,
-  ) => {
-    event.preventDefault()
-
-    const parsedWorkerCount = Number(workerCount)
-
-    if (
-      !Number.isInteger(parsedWorkerCount) ||
-      parsedWorkerCount <= 0
-    ) {
-      setErrorMessage(
-        'Ingresa un número de trabajadores mayor que cero.',
-      )
-      return
-    }
-
-    setErrorMessage(null)
-    setIsStarting(true)
-
-    try {
-      const response = await createDiagnostic({
-        worker_count: parsedWorkerCount,
-      })
-
-      setDiagnosisId(response.diagnosis_id)
-      setCatalogName(response.catalog_name)
-      setCurrentQuestion(response.next_question)
-
-      setTextAnswer('')
-      setClarificationMessage(null)
-      setResult(null)
-      setReportBlob(null)
-      setReportError(null)
-    } catch (error) {
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : 'No fue posible iniciar el diagnóstico.',
-      )
-    } finally {
-      setIsStarting(false)
-    }
-  }
-
-  const handleTextAnswer = (
-    value: string,
-  ) => {
-    setTextAnswer(value)
-    setClarificationMessage(null)
-    setErrorMessage(null)
-  }
-
-  const resetAnswer = () => {
-    setTextAnswer('')
-  }
-
-  const handleSubmitAnswer = async (
-    directAnswer?: DiagnosticAnswer,
-  ) => {
-    if (!diagnosisId || !currentQuestion) {
-      return
-    }
-
-    const normalizedText = textAnswer.trim()
-
-    const answer =
-      directAnswer ??
-      (normalizedText.length > 0
-        ? normalizedText
-        : null)
-
-    if (answer === null) {
-      setErrorMessage(
-        'Escribe una respuesta antes de continuar.',
-      )
-      return
-    }
-
-    setErrorMessage(null)
-    setClarificationMessage(null)
-    setIsSubmitting(true)
-
-    try {
-      const response =
-        await submitDiagnosticAnswer(
-          diagnosisId,
-          {
-            requirement_id:
-              currentQuestion.requirement_id,
-            question_id:
-              currentQuestion.question_id,
-            answer,
-          },
-        )
-
-      await showAnswerToast()
-
-      if (
-        response.interpretation_status ===
-        'needs_clarification'
-      ) {
-        setClarificationMessage(
-          response.clarification_message ??
-          'Necesitamos un poco más de información para interpretar la respuesta.',
-        )
-
-        setCurrentQuestion(
-          response.next_question,
-        )
-
-        return
-      }
-
-      resetAnswer()
-
-      if (
-        response.progress.completed ||
-        response.next_question === null
-      ) {
-        setCurrentQuestion(null)
-
-        const completed =
-          await completeDiagnostic(
-            diagnosisId,
-          )
-
-        setResult(completed)
-
-        return
-      }
-
-      setCurrentQuestion(
-        response.next_question,
-      )
-    } catch (error) {
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : 'No fue posible registrar la respuesta.',
-      )
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  const handleDownloadReport = async () => {
-    if (!diagnosisId) {
-      return
-    }
-
-    setReportError(null)
-    setIsDownloadingReport(true)
-
-    try {
-      const blob =
-        reportBlob ??
-        await getDiagnosticReport(
-          diagnosisId,
-        )
-
-      if (!reportBlob) {
-        setReportBlob(blob)
-      }
-
-      const url =
-        URL.createObjectURL(blob)
-
-      const link =
-        document.createElement('a')
-
-      link.href = url
-      link.download =
-        'diagnostico-sgsst.pdf'
-
-      document.body.appendChild(link)
-      link.click()
-      link.remove()
-
-      URL.revokeObjectURL(url)
-    } catch (error) {
-      setReportError(
-        error instanceof Error
-          ? error.message
-          : 'No fue posible descargar el informe.',
-      )
-    } finally {
-      setIsDownloadingReport(false)
-    }
-  }
-
-  const hasStarted =
-    diagnosisId !== null
+  const {
+    workerCount,
+    catalogName,
+    currentQuestion,
+    textAnswer,
+    result,
+    clarificationMessage,
+    isStarting,
+    isSubmitting,
+    errorMessage,
+    isDownloadingReport,
+    reportError,
+    toastMessage,
+    hasStarted,
+    handleWorkerCountChange,
+    handleStartDiagnostic,
+    handleTextAnswer,
+    handleSubmitAnswer,
+    handleDownloadReport,
+  } = useDiagnosticSession()
 
   return (
     <section className="mx-auto grid h-full min-h-0 w-full max-w-6xl gap-6 overflow-y-auto overflow-x-hidden px-[clamp(16px,4vw,56px)] py-(--mobile-page-y) md:py-(--desktop-page-y) lg:content-center lg:overflow-visible lg:grid-cols-[minmax(260px,0.8fr)_minmax(0,1.4fr)] lg:gap-x-10 lg:gap-y-6 xl:gap-x-14">
@@ -335,10 +87,9 @@ export function DiagnosticView() {
                     step={1}
                     inputMode="numeric"
                     value={workerCount}
-                    onChange={(event) => {
-                      setWorkerCount(event.target.value)
-                      setErrorMessage(null)
-                    }}
+                    onChange={(event) =>
+                      handleWorkerCountChange(event.target.value)
+                    }
                     placeholder="Ej. 5"
                     className="min-w-0 flex-1 bg-transparent text-base text-txt-medium outline-none placeholder:text-txt-subtle"
                     disabled={isStarting}
