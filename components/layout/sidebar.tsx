@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Bot } from 'lucide-react'
 import { BrandMark } from '@/components/layout/brand-mark'
 import { navigationRoutes, type AppRouteId } from '@/shared/navigation.routes'
+import { ThemeToggle } from './bottom-theme'
 
 type SidebarProps = {
   active: AppRouteId
@@ -10,11 +11,15 @@ type SidebarProps = {
 export function Sidebar({ active }: SidebarProps) {
   return (
     <aside className="relative hidden w-69 overflow-hidden rounded-panel border border-white/70 bg-capa-surface p-4 shadow-panel md:flex md:flex-col">
-      <div className="relative z-10 flex items-center gap-2.25 px-2.5 pb-12 pt-3 text-[25px] font-bold tracking-[-0.04em] text-txt-bold">
-        <BrandMark small />
-        <strong>
-          Norm<span className="text-brand-primary">IA</span>
-        </strong>
+      <div className="relative z-10 flex justify-between items-center px-2.5 pb-12 pt-3 text-[25px] font-bold tracking-[-0.04em] text-txt-bold">
+        <div className="flex items-center gap-2">
+          <BrandMark small />
+          <strong>
+            Norm<span className="text-brand-primary">IA</span>
+          </strong>
+        </div>
+
+        <ThemeToggle />
       </div>
       <nav className="relative z-10 grid gap-2">
         {navigationRoutes.map(({ id, label, href, icon: Icon }) => (

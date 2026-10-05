@@ -1,5 +1,5 @@
 import { queryConsultation } from "../api/consultation-api"
-import { useAgentSessionStore } from "@/shared/stores/agent-session.store"
+import { useAgentSessionStore } from "@/shared/stores/agent-consultation.store"
 
 const CONSULTATION_API_ERROR =
     'No pudimos obtener una respuesta de la API. Intenta nuevamente cuando el servicio esté disponible.'

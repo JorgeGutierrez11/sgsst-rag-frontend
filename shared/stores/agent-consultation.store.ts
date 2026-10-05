@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { ConsultationMessage, ConsultationQueryResponse } from "../../features/consultation/model/consultation.types";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 type ConsultationSessionState = {
     messages: ConsultationMessage[]

@@ -99,66 +99,90 @@
   --radius-app: 1rem;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
-    --bg-main: 220 15% 5%;
-    --bg-surface: 220 12% 10%;
-    --bg-soft: 220 10% 15%;
-    --bg-muted: 220 10% 18%;
+    --bg-main: 222 20% 7%;
+    --bg-surface: 222 17% 11%;
+    --bg-soft: 222 15% 15%;
+    --bg-muted: 163 30% 12%;
 
-    --brand-primary: 162 84% 48%;
-    --brand-dark: 162 84% 58%;
-    --brand-light: 162 45% 14%;
-    --brand-text: 220 15% 5%;
+    --brand-primary: 160 84% 45%;
+    --brand-dark: 160 84% 39%;
+    --brand-light: 160 40% 16%;
+    --brand-text: 222 40% 8%;
 
-    --borde-light: 220 10% 14%;
-    --borde-gray: 220 10% 18%;
-    --borde-strong: 220 10% 25%;
+    --borde-light: 222 14% 16%;
+    --borde-gray: 222 13% 21%;
+    --borde-strong: 222 12% 30%;
 
-    --txt-main: 0 0% 90%;
-    --txt-bold: 0 0% 100%;
-    --txt-medium: 0 0% 75%;
-    --txt-muted: 0 0% 62%;
-    --txt-subtle: 0 0% 55%;
+    --txt-main: 220 20% 93%;
+    --txt-bold: 210 25% 98%;
+    --txt-medium: 218 14% 74%;
+    --txt-muted: 220 10% 62%;
+    --txt-subtle: 218 10% 52%;
 
-    --error-main: 0 84% 65%;
-    --error-light: 0 84% 12%;
-    --warning-main: 38 92% 60%;
-    --warning-light: 38 92% 12%;
-    --success-main: 142 70% 55%;
-    --success-light: 142 70% 12%;
+    --error-main: 4 86% 64%;
+    --error-light: 4 45% 14%;
+
+    --warning-main: 40 90% 58%;
+    --warning-light: 38 50% 13%;
+
+    --success-main: 163 70% 47%;
+    --success-light: 162 35% 12%;
+
+    --focus-ring: 160 90% 55%;
+    --glow-primary: 160 84% 45%;
+    --shadow-soft: 0 0% 0%;
+    --shadow-brand: 160 84% 45%;
+    --shadow-strong: 0 0% 0%;
   }
-}
+} */
 
 .dark {
   color-scheme: dark;
 
-  --bg-main: 220 15% 5%;
-  --bg-surface: 220 12% 10%;
-  --bg-soft: 220 10% 15%;
-  --bg-muted: 220 10% 18%;
+  /* Backgrounds: en oscuro la elevación se expresa con luminosidad
+     (más elevado = más claro), no con sombras */
+  --bg-main: 222 20% 7%;
+  --bg-surface: 222 17% 11%;
+  --bg-soft: 222 15% 15%;
+  --bg-muted: 163 30% 12%;
 
-  --brand-primary: 162 84% 48%;
-  --brand-dark: 162 84% 58%;
-  --brand-light: 162 45% 14%;
-  --brand-text: 220 15% 5%;
+  /* Brand: menos saturación que en claro para que el verde no vibre sobre fondo oscuro */
+  --brand-primary: 160 84% 45%;
+  --brand-dark: 160 84% 39%;
+  --brand-light: 160 40% 16%;
+  --brand-text: 222 40% 8%;
+  /* sigue siendo OSCURO: es el texto sobre el botón primario */
 
-  --borde-light: 220 10% 14%;
-  --borde-gray: 220 10% 18%;
-  --borde-strong: 220 10% 25%;
+  /* Borders */
+  --borde-light: 222 14% 16%;
+  --borde-gray: 222 13% 21%;
+  --borde-strong: 222 12% 30%;
 
-  --txt-main: 0 0% 90%;
-  --txt-bold: 0 0% 100%;
-  --txt-medium: 0 0% 75%;
-  --txt-muted: 0 0% 62%;
-  --txt-subtle: 0 0% 55%;
+  /* Text: sin blanco puro, para reducir el halo y la fatiga visual */
+  --txt-main: 220 20% 93%;
+  --txt-bold: 210 25% 98%;
+  --txt-medium: 218 14% 74%;
+  --txt-muted: 220 10% 62%;
+  --txt-subtle: 218 10% 52%;
 
-  --error-main: 0 84% 65%;
-  --error-light: 0 84% 12%;
-  --warning-main: 38 92% 60%;
-  --warning-light: 38 92% 12%;
-  --success-main: 142 70% 55%;
-  --success-light: 142 70% 12%;
+  /* Status: los "main" suben de luminosidad; los "light" pasan a fondos tintados oscuros */
+  --error-main: 4 86% 64%;
+  --error-light: 4 45% 14%;
+
+  --warning-main: 40 90% 58%;
+  --warning-light: 38 50% 13%;
+
+  --success-main: 163 70% 47%;
+  --success-light: 162 35% 12%;
+
+  /* Focus / shadows */
+  --focus-ring: 160 90% 55%;
+  --glow-primary: 160 84% 45%;
+  --shadow-soft: 0 0% 0%;
+  --shadow-brand: 160 84% 45%;
+  --shadow-strong: 0 0% 0%;
 }
 
 * {
