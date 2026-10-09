@@ -6,6 +6,7 @@ import {
   Download,
   LoaderCircle,
   MessageCircle,
+  RotateCcw,
   Send,
   X,
 } from 'lucide-react'
@@ -14,6 +15,7 @@ import { useDiagnosticSession } from '@/features/diagnostic/hooks/use-diagnostic
 
 export function DiagnosticView() {
   const {
+    companyName,
     workerCount,
     catalogName,
     currentQuestion,
@@ -27,11 +29,13 @@ export function DiagnosticView() {
     reportError,
     toastMessage,
     hasStarted,
+    handleCompanyNameChange,
     handleWorkerCountChange,
     handleStartDiagnostic,
     handleTextAnswer,
     handleSubmitAnswer,
     handleDownloadReport,
+    handleRestartDiagnostic,
   } = useDiagnosticSession()
 
   return (
@@ -66,11 +70,36 @@ export function DiagnosticView() {
             </h2>
 
             <p className="m-0 mb-5 max-w-xl text-sm leading-[1.6] text-txt-muted">
-              El número de trabajadores permite determinar automáticamente
-              qué grupo de Estándares Mínimos debe evaluar el diagnóstico.
+              El nombre de la empresa se incluirá en el informe y el número de
+              trabajadores permite determinar automáticamente qué grupo de
+              Estándares Mínimos debe evaluar el diagnóstico.
             </p>
 
             <form className="grid gap-4" onSubmit={handleStartDiagnostic}>
+              <div className="grid gap-2">
+                <label
+                  htmlFor="company-name"
+                  className="text-sm font-bold text-txt-medium"
+                >
+                  Nombre de la empresa
+                </label>
+
+                <div className="flex items-center rounded-control border border-borde-light bg-capa-main px-4 py-3 transition-colors focus-within:border-brand-primary">
+                  <input
+                    id="company-name"
+                    type="text"
+                    value={companyName}
+                    onChange={(event) =>
+                      handleCompanyNameChange(event.target.value)
+                    }
+                    placeholder="Ej. Taller El Progreso"
+                    autoComplete="organization"
+                    className="min-w-0 flex-1 bg-transparent text-base text-txt-medium outline-none placeholder:text-txt-subtle"
+                    disabled={isStarting}
+                  />
+                </div>
+              </div>
+
               <div className="grid gap-2">
                 <label
                   htmlFor="worker-count"
@@ -130,15 +159,27 @@ export function DiagnosticView() {
 
         {hasStarted && currentQuestion && !result && (
           <>
-            <div className="flex items-center gap-3">
-              <span className="grid size-10 shrink-0 place-items-center rounded-[13px] bg-brand-light text-brand-primary">
-                <MessageCircle size={22} />
-              </span>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <span className="grid size-10 shrink-0 place-items-center rounded-[13px] bg-brand-light text-brand-primary">
+                  <MessageCircle size={22} />
+                </span>
 
-              <span className="rounded-full bg-brand-light px-3 py-1 text-[11px] font-bold text-brand-dark">
-                Requisito {currentQuestion.requirement_number} de{' '}
-                {currentQuestion.total_requirements}
-              </span>
+                <span className="rounded-full bg-brand-light px-3 py-1 text-[11px] font-bold text-brand-dark">
+                  Requisito {currentQuestion.requirement_number} de{' '}
+                  {currentQuestion.total_requirements}
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleRestartDiagnostic}
+                disabled={isSubmitting}
+                className="inline-flex items-center gap-1.5 rounded-full border border-borde-light bg-capa-main px-3 py-2 text-xs font-bold text-txt-muted transition hover:border-brand-primary hover:text-brand-dark disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <RotateCcw size={14} />
+                Volver a empezar
+              </button>
             </div>
 
             <h2 className="mb-1.5 mt-4 text-[20px] leading-tight tracking-[-0.035em] text-balance font-bold">
@@ -301,6 +342,16 @@ export function DiagnosticView() {
                   Descargar diagnóstico en PDF
                 </>
               )}
+            </button>
+
+            <button
+              type="button"
+              onClick={handleRestartDiagnostic}
+              disabled={isDownloadingReport}
+              className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full border border-borde-light bg-capa-main px-5 py-3 text-sm font-bold text-txt-medium transition hover:border-brand-primary hover:text-brand-dark disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <RotateCcw size={16} />
+              Volver a empezar
             </button>
 
             {reportError && (

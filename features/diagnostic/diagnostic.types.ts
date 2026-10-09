@@ -22,6 +22,7 @@ export type DiagnosticQuestion = {
 }
 
 export type CreateDiagnosticRequest = {
+  company_name: string
   worker_count: number
 }
 

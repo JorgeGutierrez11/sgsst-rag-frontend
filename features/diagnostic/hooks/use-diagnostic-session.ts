@@ -49,6 +49,11 @@ export function useDiagnosticSession() {
     })
   }, [finishAnswerToast, session.setToastMessage])
 
+  const handleCompanyNameChange = (value: string) => {
+    session.setCompanyName(value)
+    session.setErrorMessage(null)
+  }
+
   const handleWorkerCountChange = (value: string) => {
     session.setWorkerCount(value)
     session.setErrorMessage(null)
@@ -59,7 +64,13 @@ export function useDiagnosticSession() {
   ) => {
     event.preventDefault()
 
+    const companyName = session.companyName.trim()
     const parsedWorkerCount = Number(session.workerCount)
+
+    if (companyName.length === 0) {
+      session.setErrorMessage('Ingresa el nombre de la empresa.')
+      return
+    }
 
     if (!Number.isInteger(parsedWorkerCount) || parsedWorkerCount <= 0) {
       session.setErrorMessage(
@@ -73,6 +84,7 @@ export function useDiagnosticSession() {
 
     try {
       const response = await createDiagnostic({
+        company_name: companyName,
         worker_count: parsedWorkerCount,
       })
 
@@ -153,6 +165,21 @@ export function useDiagnosticSession() {
     }
   }
 
+  const handleRestartDiagnostic = () => {
+    if (session.currentQuestion) {
+      const confirmed = window.confirm(
+        'Se eliminará el progreso de este diagnóstico. ¿Quieres volver a empezar?',
+      )
+
+      if (!confirmed) {
+        return
+      }
+    }
+
+    finishAnswerToast()
+    session.resetSession()
+  }
+
   const handleDownloadReport = async () => {
     if (!session.diagnosisId) {
       return
@@ -191,6 +218,7 @@ export function useDiagnosticSession() {
   }
 
   return {
+    companyName: session.companyName,
     workerCount: session.workerCount,
     catalogName: session.catalogName,
     currentQuestion: session.currentQuestion,
@@ -204,10 +232,12 @@ export function useDiagnosticSession() {
     reportError: session.reportError,
     toastMessage: session.toastMessage,
     hasStarted: session.diagnosisId !== null,
+    handleCompanyNameChange,
     handleWorkerCountChange,
     handleStartDiagnostic,
     handleTextAnswer,
     handleSubmitAnswer,
     handleDownloadReport,
+    handleRestartDiagnostic,
   }
 }

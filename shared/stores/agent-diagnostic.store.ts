@@ -6,6 +6,7 @@ import type {
 } from '@/features/diagnostic/diagnostic.types'
 
 type DiagnosticSessionState = {
+  companyName: string
   workerCount: string
   diagnosisId: string | null
   catalogName: string | null
@@ -20,6 +21,7 @@ type DiagnosticSessionState = {
   isDownloadingReport: boolean
   reportError: string | null
   toastMessage: string | null
+  setCompanyName: (companyName: string) => void
   setWorkerCount: (workerCount: string) => void
   setDiagnosisId: (diagnosisId: string | null) => void
   setCatalogName: (catalogName: string | null) => void
@@ -34,24 +36,31 @@ type DiagnosticSessionState = {
   setIsDownloadingReport: (isDownloadingReport: boolean) => void
   setReportError: (reportError: string | null) => void
   setToastMessage: (toastMessage: string | null) => void
+  resetSession: () => void
 }
+
+const createInitialState = () => ({
+  companyName: '',
+  workerCount: '',
+  diagnosisId: null as string | null,
+  catalogName: null as string | null,
+  currentQuestion: null as DiagnosticQuestion | null,
+  textAnswer: '',
+  result: null as CompleteDiagnosticResponse | null,
+  clarificationMessage: null as string | null,
+  isStarting: false,
+  isSubmitting: false,
+  errorMessage: null as string | null,
+  reportBlob: null as Blob | null,
+  isDownloadingReport: false,
+  reportError: null as string | null,
+  toastMessage: null as string | null,
+})
 
 export const useAgentDiagnosticStore = create<DiagnosticSessionState>()(
   (set) => ({
-    workerCount: '',
-    diagnosisId: null,
-    catalogName: null,
-    currentQuestion: null,
-    textAnswer: '',
-    result: null,
-    clarificationMessage: null,
-    isStarting: false,
-    isSubmitting: false,
-    errorMessage: null,
-    reportBlob: null,
-    isDownloadingReport: false,
-    reportError: null,
-    toastMessage: null,
+    ...createInitialState(),
+    setCompanyName: (companyName) => set({ companyName }),
     setWorkerCount: (workerCount) => set({ workerCount }),
     setDiagnosisId: (diagnosisId) => set({ diagnosisId }),
     setCatalogName: (catalogName) => set({ catalogName }),
@@ -68,5 +77,6 @@ export const useAgentDiagnosticStore = create<DiagnosticSessionState>()(
       set({ isDownloadingReport }),
     setReportError: (reportError) => set({ reportError }),
     setToastMessage: (toastMessage) => set({ toastMessage }),
+    resetSession: () => set(createInitialState()),
   }),
 )
