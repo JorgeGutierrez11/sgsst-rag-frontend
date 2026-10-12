@@ -1,14 +1,9 @@
 import Link from 'next/link'
-import { ArrowRight, Check, Info, ChevronRight, ClipboardList, FileText, MessageCircle } from 'lucide-react'
+import { Info, ChevronRight, ClipboardList, MessageCircle } from 'lucide-react'
 import { BrandMark } from '@/components/layout/brand-mark'
 
 const homeActionCardClassName = 'group flex min-h-30 min-w-0 items-start gap-3 rounded-card border border-white/70 bg-capa-surface p-4 text-left text-txt-medium shadow-soft transition-[color,background-color,border-color,transform,box-shadow] hover:-translate-y-0.5 hover:border-brand-primary/30 hover:shadow-panel focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand-primary active:translate-y-0 md:p-5'
 
-const benefits = [
-  'Entiende obligaciones aplicables',
-  'Resuelve dudas antes de evaluar',
-  'Recibe un informe orientativo',
-]
 
 export function HomeView() {
   return (

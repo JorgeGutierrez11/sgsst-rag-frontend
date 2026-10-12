@@ -106,7 +106,7 @@ export function DiagnosticQuestionStage({
             {question.requirement_name}
           </h2>
 
-          <p className="mb-0 mt-1.5 text-base font-medium leading-[1.5] text-txt-bold">
+          <p className="mb-0 mt-1.5 text-base font-medium leading-normal text-txt-bold">
             {question.text}
           </p>
 
