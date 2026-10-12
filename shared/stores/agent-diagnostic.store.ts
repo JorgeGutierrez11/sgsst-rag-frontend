@@ -6,6 +6,7 @@ import type {
 } from '@/features/diagnostic/diagnostic.types'
 
 type DiagnosticSessionState = {
+  hasAcceptedGuide: boolean
   companyName: string
   workerCount: string
   diagnosisId: string | null
@@ -21,6 +22,7 @@ type DiagnosticSessionState = {
   isDownloadingReport: boolean
   reportError: string | null
   toastMessage: string | null
+  acceptGuide: () => void
   setCompanyName: (companyName: string) => void
   setWorkerCount: (workerCount: string) => void
   setDiagnosisId: (diagnosisId: string | null) => void
@@ -40,6 +42,7 @@ type DiagnosticSessionState = {
 }
 
 const createInitialState = () => ({
+  hasAcceptedGuide: false,
   companyName: '',
   workerCount: '',
   diagnosisId: null as string | null,
@@ -60,6 +63,7 @@ const createInitialState = () => ({
 export const useAgentDiagnosticStore = create<DiagnosticSessionState>()(
   (set) => ({
     ...createInitialState(),
+    acceptGuide: () => set({ hasAcceptedGuide: true }),
     setCompanyName: (companyName) => set({ companyName }),
     setWorkerCount: (workerCount) => set({ workerCount }),
     setDiagnosisId: (diagnosisId) => set({ diagnosisId }),

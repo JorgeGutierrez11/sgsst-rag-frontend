@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef } from 'react'
 import type { FormEvent } from 'react'
+import { useRouter } from 'next/navigation'
 
 import {
   completeDiagnostic,
@@ -10,18 +11,20 @@ import {
   submitDiagnosticAnswer,
 } from '@/features/diagnostic/api/diagnostic-api'
 import type { DiagnosticAnswer } from '@/features/diagnostic/diagnostic.types'
+import { useAgentSessionStore } from '@/shared/stores/agent-consultation.store'
 import { useAgentDiagnosticStore } from '@/shared/stores/agent-diagnostic.store'
 
-const ANSWER_TOAST_DURATION_MS = 2200
+const ANSWER_TOAST_DURATION_MS = 1200
 
 function getErrorMessage(error: unknown, fallbackMessage: string) {
   return error instanceof Error ? error.message : fallbackMessage
 }
 
 export function useDiagnosticSession() {
+  const router = useRouter()
   const session = useAgentDiagnosticStore()
+  const setConsultationDraft = useAgentSessionStore((state) => state.setInput)
   const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const toastResolveRef = useRef<(() => void) | null>(null)
 
   const finishAnswerToast = useCallback(() => {
     if (toastTimeoutRef.current) {
@@ -30,8 +33,6 @@ export function useDiagnosticSession() {
     }
 
     session.setToastMessage(null)
-    toastResolveRef.current?.()
-    toastResolveRef.current = null
   }, [session.setToastMessage])
 
   useEffect(() => finishAnswerToast, [finishAnswerToast])
@@ -39,14 +40,10 @@ export function useDiagnosticSession() {
   const showAnswerToast = useCallback(() => {
     finishAnswerToast()
     session.setToastMessage('Respuesta registrada')
-
-    return new Promise<void>((resolve) => {
-      toastResolveRef.current = resolve
-      toastTimeoutRef.current = setTimeout(
-        finishAnswerToast,
-        ANSWER_TOAST_DURATION_MS,
-      )
-    })
+    toastTimeoutRef.current = setTimeout(
+      finishAnswerToast,
+      ANSWER_TOAST_DURATION_MS,
+    )
   }, [finishAnswerToast, session.setToastMessage])
 
   const handleCompanyNameChange = (value: string) => {
@@ -136,12 +133,12 @@ export function useDiagnosticSession() {
         answer,
       })
 
-      await showAnswerToast()
+      showAnswerToast()
 
       if (response.interpretation_status === 'needs_clarification') {
         session.setClarificationMessage(
           response.clarification_message ??
-            'Necesitamos un poco más de información para interpretar la respuesta.',
+          'Necesitamos un poco más de información para interpretar la respuesta.',
         )
         session.setCurrentQuestion(response.next_question)
         return
@@ -178,6 +175,29 @@ export function useDiagnosticSession() {
 
     finishAnswerToast()
     session.resetSession()
+  }
+
+  const handleRequestConsultationHelp = () => {
+    if (!session.currentQuestion) {
+      return
+    }
+
+    const contextLines = [
+      `Pregunta: ${session.currentQuestion.text}`,
+    ]
+
+    if (session.catalogName) {
+      contextLines.push(`Ámbito: ${session.catalogName}`)
+    }
+
+    setConsultationDraft(
+      [
+        ...contextLines,
+        '',
+        'Explícame qué significa y cómo puedo saber si mi empresa cumple.',
+      ].join('\n'),
+    )
+    router.push('/consulta')
   }
 
   const handleDownloadReport = async () => {
@@ -218,6 +238,7 @@ export function useDiagnosticSession() {
   }
 
   return {
+    hasAcceptedGuide: session.hasAcceptedGuide,
     companyName: session.companyName,
     workerCount: session.workerCount,
     catalogName: session.catalogName,
@@ -232,11 +253,13 @@ export function useDiagnosticSession() {
     reportError: session.reportError,
     toastMessage: session.toastMessage,
     hasStarted: session.diagnosisId !== null,
+    handleAcceptGuide: session.acceptGuide,
     handleCompanyNameChange,
     handleWorkerCountChange,
     handleStartDiagnostic,
     handleTextAnswer,
     handleSubmitAnswer,
+    handleRequestConsultationHelp,
     handleDownloadReport,
     handleRestartDiagnostic,
   }
