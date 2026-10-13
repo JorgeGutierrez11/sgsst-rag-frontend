@@ -1,6 +1,11 @@
 import type { ConsultationQueryRequest, ConsultationQueryResponse } from '@/features/consultation/model/consultation.types'
 
-const CONSULTATION_API_URL = 'http://127.0.0.1:8000/api/v1/query'
+const CONSULTATION_API_URL = `${process.env.NEXT_PUBLIC_SGSST_API_URL}/api/v1/query`
+
+console.log(
+  'API URL:',
+  process.env.NEXT_PUBLIC_SGSST_API_URL
+)
 
 export async function queryConsultation(request: ConsultationQueryRequest): Promise<ConsultationQueryResponse> {
   const response = await fetch(CONSULTATION_API_URL, {

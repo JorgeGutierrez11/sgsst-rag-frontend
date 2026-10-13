@@ -6,9 +6,7 @@ import type {
   SubmitDiagnosticAnswerResponse,
 } from '@/features/diagnostic/diagnostic.types'
 
-const DIAGNOSTIC_API_URL =
-  process.env.NEXT_PUBLIC_DIAGNOSTIC_API_URL ??
-  'http://127.0.0.1:8001/api/v1/diagnostics'
+const DIAGNOSTIC_API_URL = `${process.env.NEXT_PUBLIC_SGSST_API_URL}/api/v1/diagnostics`
 
 async function parseApiError(response: Response): Promise<string> {
   try {
