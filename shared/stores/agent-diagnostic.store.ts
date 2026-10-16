@@ -23,6 +23,7 @@ type DiagnosticSessionState = {
   reportError: string | null
   toastMessage: string | null
   acceptGuide: () => void
+  returnToGuide: () => void
   setCompanyName: (companyName: string) => void
   setWorkerCount: (workerCount: string) => void
   setDiagnosisId: (diagnosisId: string | null) => void
@@ -64,6 +65,7 @@ export const useAgentDiagnosticStore = create<DiagnosticSessionState>()(
   (set) => ({
     ...createInitialState(),
     acceptGuide: () => set({ hasAcceptedGuide: true }),
+    returnToGuide: () => set({ hasAcceptedGuide: false, errorMessage: null,}),
     setCompanyName: (companyName) => set({ companyName }),
     setWorkerCount: (workerCount) => set({ workerCount }),
     setDiagnosisId: (diagnosisId) => set({ diagnosisId }),

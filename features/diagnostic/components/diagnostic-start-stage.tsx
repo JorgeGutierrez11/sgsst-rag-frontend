@@ -9,6 +9,7 @@ type DiagnosticStartStageProps = {
   onCompanyNameChange: (value: string) => void
   onWorkerCountChange: (value: string) => void
   onSubmit: FormEventHandler<HTMLFormElement>
+  onBack: () => void
 }
 
 export function DiagnosticStartStage({
@@ -19,6 +20,7 @@ export function DiagnosticStartStage({
   onCompanyNameChange,
   onWorkerCountChange,
   onSubmit,
+  onBack,
 }: DiagnosticStartStageProps) {
   return (
     <>
@@ -98,6 +100,15 @@ export function DiagnosticStartStage({
           ) : (
             'Iniciar diagnóstico'
           )}
+        </button>
+
+        <button
+          type="button"
+          onClick={onBack}
+          disabled={isStarting}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-borde-light bg-capa-surface px-5 py-3 text-sm font-bold text-txt-medium transition-colors hover:bg-capa-main disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          Volver a la guía
         </button>
       </form>
     </>

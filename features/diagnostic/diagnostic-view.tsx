@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { RotateCcw, TriangleAlert } from 'lucide-react'
 
 import { DiagnosticGuideStage } from '@/features/diagnostic/components/diagnostic-guide-stage'
 import { DiagnosticQuestionStage } from '@/features/diagnostic/components/diagnostic-question-stage'
@@ -22,10 +23,25 @@ function getShellSizeClassName(isGuideStage: boolean, isQuestionStage: boolean) 
 
 export function DiagnosticView() {
   const diagnosticSession = useDiagnosticSession()
+  const [isRestartModalOpen, setIsRestartModalOpen] = useState(false)
+  const restartDialogRef = useRef<HTMLDialogElement>(null)
+  const handleRequestRestart = () => {setIsRestartModalOpen(true)}
+  const handleConfirmRestart = () => {setIsRestartModalOpen(false), diagnosticSession.handleRestartDiagnostic()}
   const scrollContainerRef = useRef<HTMLElement>(null)
   const questionStageRef = useRef<HTMLDivElement>(null)
   const questionHeadingRef = useRef<HTMLHeadingElement>(null)
   const questionId = diagnosticSession.currentQuestion?.question_id
+
+  useEffect(() => {
+    const dialog = restartDialogRef.current
+    if (!dialog) return
+
+    if (isRestartModalOpen && !dialog.open) {
+      dialog.showModal()
+    } else if (!isRestartModalOpen && dialog.open) {
+      dialog.close()
+    }
+  }, [isRestartModalOpen])
 
   useEffect(() => {
     if (!questionId) return
@@ -75,7 +91,10 @@ export function DiagnosticView() {
         {!isGuideStage && <h1 className="sr-only">Diagnóstico SG-SST</h1>}
 
         {isGuideStage && (
-          <DiagnosticGuideStage onAccept={diagnosticSession.handleAcceptGuide} />
+          <DiagnosticGuideStage
+            onAccept={diagnosticSession.handleAcceptGuide}
+            onRequestRiskClassHelp={diagnosticSession.handleRequestRiskClassHelp}
+          />
         )}
 
         {isStartStage && (
@@ -87,6 +106,7 @@ export function DiagnosticView() {
             onCompanyNameChange={diagnosticSession.handleCompanyNameChange}
             onWorkerCountChange={diagnosticSession.handleWorkerCountChange}
             onSubmit={diagnosticSession.handleStartDiagnostic}
+            onBack={diagnosticSession.handleReturnToGuide}
           />
         )}
 
@@ -106,7 +126,7 @@ export function DiagnosticView() {
             onRequestConsultationHelp={
               diagnosticSession.handleRequestConsultationHelp
             }
-            onRestart={diagnosticSession.handleRestartDiagnostic}
+            onRestart={handleRequestRestart}
           />
         )}
 
@@ -115,10 +135,65 @@ export function DiagnosticView() {
             isDownloadingReport={diagnosticSession.isDownloadingReport}
             reportError={diagnosticSession.reportError}
             onDownloadReport={diagnosticSession.handleDownloadReport}
-            onRestart={diagnosticSession.handleRestartDiagnostic}
+            onRestart={handleRequestRestart}
           />
         )}
       </div>
+
+      <dialog
+        ref={restartDialogRef}
+        aria-labelledby="restart-dialog-title"
+        aria-describedby="restart-dialog-description"
+        onCancel={() => setIsRestartModalOpen(false)}
+        onClose={() => setIsRestartModalOpen(false)}
+        className="m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl border border-borde-light bg-capa-surface p-0 text-txt-medium shadow-2xl backdrop:bg-slate-950/55"
+      >
+        <div className="p-6 sm:p-7">
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-red-50">
+            <TriangleAlert
+              size={24}
+              className="text-red-600"
+              aria-hidden="true"
+            />
+          </div>
+
+          <h2
+            id="restart-dialog-title"
+            className="m-0 text-xl font-bold text-txt-bold"
+          >
+            ¿Quieres volver a empezar?
+          </h2>
+
+          <p
+            id="restart-dialog-description"
+            className="mb-6 mt-3 text-sm leading-relaxed text-txt-medium"
+          >
+            Si reinicias el diagnóstico, perderás las respuestas
+            registradas y tendrás que completar nuevamente el
+            cuestionario.
+          </p>
+
+          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              autoFocus
+              onClick={() => setIsRestartModalOpen(false)}
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-borde-light bg-capa-main px-5 py-2.5 text-sm font-bold text-txt-medium transition-colors hover:bg-capa-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+            >
+              Cancelar
+            </button>
+
+            <button
+              type="button"
+              onClick={handleConfirmRestart}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-red-600 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+            >
+              <RotateCcw size={16} aria-hidden="true" />
+              Sí, reiniciar
+            </button>
+          </div>
+        </div>
+      </dialog>
     </section>
   )
 }

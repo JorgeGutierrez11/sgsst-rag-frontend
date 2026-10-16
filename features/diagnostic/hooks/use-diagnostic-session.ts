@@ -163,18 +163,21 @@ export function useDiagnosticSession() {
   }
 
   const handleRestartDiagnostic = () => {
-    if (session.currentQuestion) {
-      const confirmed = window.confirm(
-        'Se eliminará el progreso de este diagnóstico. ¿Quieres volver a empezar?',
-      )
-
-      if (!confirmed) {
-        return
-      }
-    }
-
     finishAnswerToast()
     session.resetSession()
+  }
+
+  const handleRequestRiskClassHelp = () => {
+    setConsultationDraft(
+      [
+        'Quiero identificar si mi empresa corresponde a la clase de riesgo I.',
+        '',
+        'Actividad económica principal: [describe qué hace tu empresa]',
+        'Código CIIU: [escríbelo aquí o indica que no lo conoces]',
+      ].join('\n'),
+    )
+
+    router.push('/consulta')
   }
 
   const handleRequestConsultationHelp = () => {
@@ -254,6 +257,7 @@ export function useDiagnosticSession() {
     toastMessage: session.toastMessage,
     hasStarted: session.diagnosisId !== null,
     handleAcceptGuide: session.acceptGuide,
+    handleReturnToGuide: session.returnToGuide,
     handleCompanyNameChange,
     handleWorkerCountChange,
     handleStartDiagnostic,
@@ -262,5 +266,6 @@ export function useDiagnosticSession() {
     handleRequestConsultationHelp,
     handleDownloadReport,
     handleRestartDiagnostic,
+    handleRequestRiskClassHelp,
   }
 }

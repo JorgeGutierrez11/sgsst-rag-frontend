@@ -3,7 +3,7 @@ import {
   Check,
   ClipboardList,
   ExternalLink,
-  TriangleAlert,
+  CircleHelp,
   X,
 } from 'lucide-react'
 
@@ -16,9 +16,13 @@ import { GUIDE_CTA_CSS } from '@/features/diagnostic/constants/diagnostic-motion
 
 type DiagnosticGuideStageProps = {
   onAccept: () => void
+  onRequestRiskClassHelp: () => void
 }
 
-export function DiagnosticGuideStage({ onAccept }: DiagnosticGuideStageProps) {
+export function DiagnosticGuideStage({
+  onAccept,
+  onRequestRiskClassHelp,
+}: DiagnosticGuideStageProps) {
   return (
     <>
       <style>{GUIDE_CTA_CSS}</style>
@@ -163,22 +167,32 @@ export function DiagnosticGuideStage({ onAccept }: DiagnosticGuideStageProps) {
 
         {/* Aviso + acción principal en una sola fila (lg+) */}
         <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-          <div className="flex items-start gap-2.5 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5">
-            <TriangleAlert
-              className="mt-0.5 shrink-0 text-amber-700"
-              size={18}
+          <div className="flex items-start gap-2.5 rounded-xl border border-brand-primary/25 bg-brand-light/40 px-3.5 py-3">
+            <CircleHelp
+              className="mt-0.5 shrink-0 text-brand-primary"
+              size={20}
               aria-hidden="true"
             />
 
-            {/* Título y texto en un solo párrafo: ahorra una línea */}
-            <p className="m-0 text-sm leading-snug text-amber-900">
-              <strong className="font-bold">
-                Descarga tu informe antes de salir.
-              </strong>{' '}
-              Por tu privacidad, no guardamos un historial de diagnósticos. Si
-              sales de esta sección, recargas la página o la descarga se
-              interrumpe, es posible que tengas que repetir el cuestionario.
-            </p>
+            <div className="min-w-0">
+              <h2 className="m-0 text-sm font-bold text-txt-bold">
+                ¿No sabes si tu empresa pertenece al riesgo I?
+              </h2>
+
+              <p className="mb-2 mt-1 text-sm leading-snug text-txt-medium">
+                Consulta tu clase de riesgo con nuestro asistente normativo antes
+                de comenzar. Describe la actividad económica de tu empresa.
+              </p>
+
+              <button
+                type="button"
+                onClick={onRequestRiskClassHelp}
+                className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-brand-primary/40 bg-capa-surface px-3 py-2 text-sm font-bold text-brand-primary transition-colors hover:bg-brand-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+              >
+                Consultar mi clase de riesgo
+                <ArrowRight size={16} aria-hidden="true" />
+              </button>
+            </div>
           </div>
 
           {/* Pegajoso: si la pantalla es baja (o es un celular) y hay que hacer
