@@ -31,18 +31,6 @@ type DiagnosticQuestionStageProps = {
   onRestart: () => void
 }
 
-function getCompletedRequirementCount(question: DiagnosticQuestion) {
-  return Math.max(0, question.requirement_number - 1)
-}
-
-function getProgressPercentage(question: DiagnosticQuestion) {
-  if (question.total_requirements <= 0) {
-    return 0
-  }
-
-  return (getCompletedRequirementCount(question) / question.total_requirements) * 100
-}
-
 export function DiagnosticQuestionStage({
   question,
   catalogName,
@@ -58,45 +46,22 @@ export function DiagnosticQuestionStage({
   onRequestConsultationHelp,
   onRestart,
 }: DiagnosticQuestionStageProps) {
-  const completedRequirementCount = getCompletedRequirementCount(question)
-
   return (
     <>
       <style>{QUESTION_MOTION_CSS}</style>
 
       <div ref={stageRef}>
-        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 px-1">
-          <p className="m-0 text-sm font-bold text-brand-dark">
-            Requisito {question.requirement_number} de {question.total_requirements}
-          </p>
-
-          {catalogName && (
-            <p className="m-0 min-w-0 text-sm leading-snug text-txt-medium">
-              Ámbito: {catalogName}
-            </p>
-          )}
-        </div>
-
-        <div
-          role="progressbar"
-          aria-label="Progreso del diagnóstico"
-          aria-valuemin={0}
-          aria-valuemax={question.total_requirements}
-          aria-valuenow={completedRequirementCount}
-          aria-valuetext={`${completedRequirementCount} de ${question.total_requirements} requisitos respondidos`}
-          className="mt-1.5 h-2 overflow-hidden rounded-full bg-brand-primary/15"
-        >
-          <div
-            className="h-full rounded-full bg-brand-primary transition-[width] duration-500 ease-out motion-reduce:transition-none"
-            style={{ width: `${getProgressPercentage(question)}%` }}
-          />
-        </div>
-
         <section
           key={question.question_id}
           aria-labelledby="active-question-title"
           className="diagnostic-question-card mt-3 rounded-2xl border border-brand-primary/25 border-l-4 border-l-brand-primary bg-brand-light/45 px-4 py-3.5 sm:px-5"
         >
+          <div className="mb-2 flex items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wide text-brand-dark">
+              Requisito {question.requirement_number} de {question.total_requirements}
+            </span>
+          </div>
+
           <h2
             id="active-question-title"
             ref={headingRef}
@@ -207,6 +172,12 @@ export function DiagnosticQuestionStage({
           Volver a empezar
         </button>
       </div>
+
+      {catalogName && (
+        <p className="mb-0 mt-3 border-t border-borde-light pt-3 text-xs leading-relaxed text-txt-muted">
+          <span className="font-bold">Ámbito:</span> {catalogName}
+        </p>
+      )}
     </>
   )
 }

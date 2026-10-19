@@ -1,5 +1,6 @@
 import type {
   CompleteDiagnosticResponse,
+  DiagnosticState,
   CreateDiagnosticRequest,
   CreateDiagnosticResponse,
   SubmitDiagnosticAnswerRequest,
@@ -71,6 +72,30 @@ export async function submitDiagnosticAnswer(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
+    },
+  )
+}
+
+export async function getDiagnosticState(
+  diagnosisId: string,
+): Promise<DiagnosticState> {
+  return requestJson<DiagnosticState>(
+    `${DIAGNOSTIC_API_URL}/${encodeURIComponent(diagnosisId)}`,
+    { method: 'GET' },
+  )
+}
+
+export async function restartDiagnosticRequirement(
+  diagnosisId: string,
+  requirementId: string,
+  revision: number,
+): Promise<DiagnosticState> {
+  return requestJson<DiagnosticState>(
+    `${DIAGNOSTIC_API_URL}/${encodeURIComponent(diagnosisId)}/requirements/${encodeURIComponent(requirementId)}/restart`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ revision }),
     },
   )
 }

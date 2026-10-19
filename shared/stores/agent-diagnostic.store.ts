@@ -3,6 +3,9 @@ import { create } from 'zustand'
 import type {
   CompleteDiagnosticResponse,
   DiagnosticQuestion,
+  DiagnosticProgress,
+  DiagnosticRequirementProgress,
+  DiagnosticState,
 } from '@/features/diagnostic/diagnostic.types'
 
 type DiagnosticSessionState = {
@@ -12,6 +15,11 @@ type DiagnosticSessionState = {
   diagnosisId: string | null
   catalogName: string | null
   currentQuestion: DiagnosticQuestion | null
+  progress: DiagnosticProgress | null
+  requirements: DiagnosticRequirementProgress[]
+  revision: number
+  isRestartingRequirement: boolean
+  isReportGenerated: boolean
   textAnswer: string
   result: CompleteDiagnosticResponse | null
   clarificationMessage: string | null
@@ -29,6 +37,9 @@ type DiagnosticSessionState = {
   setDiagnosisId: (diagnosisId: string | null) => void
   setCatalogName: (catalogName: string | null) => void
   setCurrentQuestion: (currentQuestion: DiagnosticQuestion | null) => void
+  applyDiagnosticState: (state: DiagnosticState) => void
+  setIsRestartingRequirement: (value: boolean) => void
+  setIsReportGenerated: (value: boolean) => void
   setTextAnswer: (textAnswer: string) => void
   setResult: (result: CompleteDiagnosticResponse | null) => void
   setClarificationMessage: (clarificationMessage: string | null) => void
@@ -49,6 +60,11 @@ const createInitialState = () => ({
   diagnosisId: null as string | null,
   catalogName: null as string | null,
   currentQuestion: null as DiagnosticQuestion | null,
+  progress: null as DiagnosticProgress | null,
+  requirements: [] as DiagnosticRequirementProgress[],
+  revision: 0,
+  isRestartingRequirement: false,
+  isReportGenerated: false,
   textAnswer: '',
   result: null as CompleteDiagnosticResponse | null,
   clarificationMessage: null as string | null,
@@ -71,6 +87,18 @@ export const useAgentDiagnosticStore = create<DiagnosticSessionState>()(
     setDiagnosisId: (diagnosisId) => set({ diagnosisId }),
     setCatalogName: (catalogName) => set({ catalogName }),
     setCurrentQuestion: (currentQuestion) => set({ currentQuestion }),
+    applyDiagnosticState: (state) =>
+      set({
+        diagnosisId: state.diagnosis_id,
+        currentQuestion: state.next_question,
+        progress: state.progress,
+        requirements: state.requirements,
+        revision: state.revision,
+      }),
+    setIsRestartingRequirement: (isRestartingRequirement) =>
+      set({ isRestartingRequirement }),
+    setIsReportGenerated: (isReportGenerated) =>
+      set({ isReportGenerated }),
     setTextAnswer: (textAnswer) => set({ textAnswer }),
     setResult: (result) => set({ result }),
     setClarificationMessage: (clarificationMessage) =>
