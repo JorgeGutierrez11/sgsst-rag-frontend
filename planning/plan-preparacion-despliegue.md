@@ -1,6 +1,6 @@
 # Plan de preparación para despliegue — NormIA Frontend
 
-Este plan resuelve la deuda técnica que impide desplegar el frontend en contenedores y deja listos el `Dockerfile`, los archivos de Compose (`compose.yaml` y sus capas) y los flujos de GitHub Actions. Al terminar, una sola imagen sirve para cualquier entorno, el backend se configura al arrancar el contenedor y cada cambio pasa por typecheck, lint, tests y build antes de publicarse en GHCR.
+Este plan resuelve la deuda técnica que impide desplegar el frontend en contenedores y deja listos el `Dockerfile`, los archivos de Compose (`compose.yaml` y sus capas) y los flujos de GitHub Actions. Al terminar, una sola imagen sirve para cualquier entorno, el backend se configura al arrancar el contenedor y cada cambio pasa por typecheck, lint, tests, build y una prueba de arranque de la imagen en GitHub Actions.
 
 ## Decisiones acordadas
 
@@ -9,7 +9,7 @@ Este plan resuelve la deuda técnica que impide desplegar el frontend en contene
 | URL del backend | El frontend actúa como proxy de `/api/v1/*` mediante `proxy.ts` y lee `SGSST_API_URL` en cada petición. Una sola imagen para todos los entornos y sin CORS. Reemplaza el acuerdo previo de "sin proxy". |
 | Gestor de paquetes | pnpm es el único oficial. Se elimina `package-lock.json`. |
 | Docker Compose | Levanta solo el frontend; el backend se publica y despliega desde su propio repositorio. |
-| GitHub Actions | CI en cada PR y, en `main` y en las etiquetas `v*`, publicación de la imagen en GHCR. El despliegue sigue siendo manual. |
+| GitHub Actions | Dos workflows como el backend: `tests.yml` (calidad) e `image.yml` (imagen y arranque). Publicación en GHCR pendiente hasta que exista producción. |
 | Tests | Vitest, con tests del proxy y de los clientes de la API. |
 
 > Los `rewrites` de `next.config.mjs` no sirven para este objetivo: Next los fija durante el build. El proxy tiene que vivir en `proxy.ts`, que se ejecuta en cada petición.
@@ -22,7 +22,7 @@ Este plan resuelve la deuda técnica que impide desplegar el frontend en contene
 | 1 | Calidad verificable: typecheck, lint, Vitest, limpieza de deuda | Sí |
 | 2 | Proxy en runtime y health check | Sí |
 | 3 | Dockerfile y Docker Compose | Sí |
-| 4 | Workflows de GitHub Actions | Sí |
+| 4 | Workflows de GitHub Actions (`tests.yml` e `image.yml`) | Sí |
 | 5 | Documentación de ejecución y despliegue | No |
 | 6 | Deuda de mantenibilidad del diagnóstico | No |
 
@@ -149,26 +149,25 @@ Se sigue la misma estructura del backend: Dockerfile con secciones numeradas y C
 
 ## Fase 4 — GitHub Actions
 
-**Cambios**
-1. Crear `.github/workflows/ci.yml`, que corre en `pull_request` y en `push` a `main`:
-   - `pnpm/action-setup` y `actions/setup-node` con Node 24 y caché de pnpm.
-   - `pnpm install --frozen-lockfile`, `pnpm typecheck`, `pnpm lint`, `pnpm test` y `pnpm build`.
-   - En los PR, un build de la imagen Docker sin publicarla, para detectar un `Dockerfile` roto antes del merge.
-2. Crear `.github/workflows/publish-image.yml`, que corre en `push` a `main` y en las etiquetas `v*`:
-   - Repite las verificaciones de calidad como job previo (`needs`), para no publicar sin pasar CI.
-   - `docker/login-action` contra GHCR con `GITHUB_TOKEN` y `permissions: packages: write`.
-   - `docker/metadata-action` con etiquetas `sha-<corto>`, `latest` (solo en `main`) y semver (en las etiquetas).
-   - `docker/build-push-action` con caché `type=gha`.
-3. Fijar las actions a versiones mayores estables.
+Se sigue la misma estructura del backend: dos workflows con secciones numeradas, permisos de solo lectura y actions fijadas por SHA.
 
-**Archivos:** `.github/workflows/ci.yml` (nuevo), `.github/workflows/publish-image.yml` (nuevo).
+**Cambios**
+1. Crear `.github/workflows/tests.yml`, que corre en `push` a `dev` y `main`, en `pull_request` a `main` y manualmente:
+   - `pnpm/action-setup` (versión desde `packageManager`) y `actions/setup-node` con `.nvmrc` y caché de pnpm.
+   - `pnpm install --frozen-lockfile`, `pnpm typecheck`, `pnpm lint`, `pnpm test` y `pnpm build`.
+2. Crear `.github/workflows/image.yml`, que corre en `push` a `main`, en `pull_request` a `main` y manualmente:
+   - `docker compose build` de `sg-sst-frontend:local` y su tamaño.
+   - Higiene de la imagen: usuario sin privilegios (uid 1000) y sin `.env`, código fuente ni `.git`.
+   - Prueba de arranque con `docker compose up --wait`: `/api/health`, las páginas principales y el proxy activo (`/api/v1` responde el 404 de `proxy.ts` sin llamar al backend).
+3. Publicación en GHCR: pendiente de decisión. Mientras no exista producción, la imagen no se publica (igual que el backend).
+
+**Archivos:** `.github/workflows/tests.yml` (nuevo), `.github/workflows/image.yml` (nuevo).
 
 **Criterios de aceptación**
-- [ ] Un PR con un error de tipos o un test roto queda en rojo.
-- [ ] Un merge a `main` publica `ghcr.io/jorgegutierrez11/sgsst-rag-frontend:latest` y la etiqueta `sha-*`.
-- [ ] La imagen publicada arranca con `docker run` cambiando solo `SGSST_API_URL`.
+- [ ] Un PR con un error de tipos, de lint o un test roto queda en rojo en `tests`.
+- [ ] Un `Dockerfile` roto o una imagen que no arranca deja en rojo `image`.
 
-**Riesgo:** ítem 5 (CI y release).
+**Riesgo:** ítem 5 (CI).
 
 ---
 
@@ -176,7 +175,7 @@ Se sigue la misma estructura del backend: Dockerfile con secciones numeradas y C
 
 **Cambios**
 1. Actualizar `GUIA_EJECUCION_FRONTEND.md`: solo pnpm, Node 24, `SGSST_API_URL` en lugar de `NEXT_PUBLIC_*` y eliminar la referencia obsoleta a `NEXT_PUBLIC_DIAGNOSTIC_API_URL` y al puerto 8001.
-2. Agregar a esa guía una sección de despliegue con Docker: variables, `docker compose up`, la red compartida opcional y cómo descargar la imagen desde GHCR.
+2. Agregar a esa guía una sección de despliegue con Docker: variables, `docker compose up`, la red compartida opcional y, cuando exista producción, cómo obtener la imagen publicada.
 3. Actualizar `AGENTS.md` con los nuevos scripts y comandos de verificación.
 
 **Archivos:** `GUIA_EJECUCION_FRONTEND.md`, `AGENTS.md`.
