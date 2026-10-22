@@ -1,0 +1,33 @@
+# Production-like default; development adds compose.dev.yaml explicitly with -f.
+
+# 1. PROYECTO
+name: sg-sst-frontend
+
+services:
+  frontend:
+
+    # 2. CONSTRUCCIÓN DE LA IMAGEN
+    build:
+      context: .
+      target: runtime
+    image: sg-sst-frontend:local
+
+
+    # 3. CONFIGURACIÓN
+    # proxy.ts lee SGSST_API_URL en cada petición: cambiarla solo requiere `docker compose up -d`, no reconstruir.
+    environment:
+      SGSST_API_URL: ${SGSST_API_URL:?Define SGSST_API_URL con el origen del backend, por ejemplo http://backend:8000}
+
+
+    # 4. RED
+    # Publicado solo en localhost, igual que el backend; un reverse proxy lo expone hacia afuera.
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-3000}:3000"
+    # Permite llegar a un backend que corre en el host. Un firewall del host puede bloquear ese tráfico;
+    # en ese caso se recomienda compose.backend-network.yaml.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+    # 5. POLÍTICA DE REINICIO
+    restart: unless-stopped

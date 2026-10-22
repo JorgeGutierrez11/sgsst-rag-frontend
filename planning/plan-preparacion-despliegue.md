@@ -1,6 +1,6 @@
 # Plan de preparación para despliegue — NormIA Frontend
 
-Este plan resuelve la deuda técnica que impide desplegar el frontend en contenedores y deja listos el `Dockerfile`, el `docker-compose.yml` y los flujos de GitHub Actions. Al terminar, una sola imagen sirve para cualquier entorno, el backend se configura al arrancar el contenedor y cada cambio pasa por typecheck, lint, tests y build antes de publicarse en GHCR.
+Este plan resuelve la deuda técnica que impide desplegar el frontend en contenedores y deja listos el `Dockerfile`, los archivos de Compose (`compose.yaml` y sus capas) y los flujos de GitHub Actions. Al terminar, una sola imagen sirve para cualquier entorno, el backend se configura al arrancar el contenedor y cada cambio pasa por typecheck, lint, tests y build antes de publicarse en GHCR.
 
 ## Decisiones acordadas
 
@@ -119,19 +119,24 @@ Cada fase se entrega como un commit o PR revisable, con su código, sus tests y 
 **Cambios — imagen**
 1. Agregar `output: 'standalone'` en `next.config.mjs`.
 2. Escribir un `Dockerfile` multi-stage sobre `node:24-alpine` con una versión exacta:
-   - `deps`: `corepack enable` y `pnpm install --frozen-lockfile`.
+   - `base`: `corepack enable` (pnpm fijado por `packageManager`).
+   - `deps`: `pnpm install --frozen-lockfile`.
+   - `development`: `next dev` como usuario `node`, para `compose.dev.yaml`.
    - `builder`: `pnpm build` con `NEXT_TELEMETRY_DISABLED=1`.
-   - `runner`: copia solo `.next/standalone` y `.next/static`, corre con un usuario sin privilegios, `ENV PORT=3000 HOSTNAME=0.0.0.0` y un `HEALTHCHECK` contra `/api/health`.
+   - `runtime`: copia solo `.next/standalone` y `.next/static`, corre con un usuario sin privilegios, `ENV PORT=3000 HOSTNAME=0.0.0.0` y un `HEALTHCHECK` contra `/api/health`.
 3. Crear un `.dockerignore` que excluya `node_modules`, `.next`, `.git`, `.env*`, `.codegraph`, `.atl`, `odd` y `planning`.
 
 **Cambios — Compose**
-1. Crear `docker-compose.yml` con un único servicio `frontend`:
-   - `image: ghcr.io/jorgegutierrez11/sgsst-rag-frontend:${IMAGE_TAG:-latest}`, con `build: .` como alternativa local.
-   - `environment: SGSST_API_URL` (obligatoria), `ports: 3000:3000`, `restart: unless-stopped` y `healthcheck`.
-   - `extra_hosts: host.docker.internal:host-gateway`, para llegar a un backend que corre en el host durante el desarrollo.
-2. Crear `docker-compose.backend-network.yml` como override opcional que conecta el servicio a una red externa compartida con el backend, por ejemplo `SGSST_API_URL=http://backend:8000`. Así el backend no necesita exponerse a internet.
+Se sigue la misma estructura del backend: Dockerfile con secciones numeradas y Compose en capas (`compose.yaml` base parecida a producción y `compose.dev.yaml` para desarrollo).
 
-**Archivos:** `next.config.mjs`, `Dockerfile` (nuevo), `.dockerignore` (nuevo), `docker-compose.yml` (nuevo), `docker-compose.backend-network.yml` (nuevo).
+1. Crear `compose.yaml` (proyecto `sg-sst-frontend`) con un único servicio `frontend`:
+   - `image: sg-sst-frontend:local`, construida localmente desde el Dockerfile (igual que `sg-sst-backend:local`). La imagen de GHCR de la fase 4 no se usa en Compose hasta que exista un entorno de producción.
+   - `environment: SGSST_API_URL` (obligatoria), `ports: 127.0.0.1:3000:3000` (igual que el backend), `restart: unless-stopped` y el `HEALTHCHECK` heredado de la imagen.
+   - `extra_hosts: host.docker.internal:host-gateway`, para llegar a un backend que corre en el host durante el desarrollo.
+2. Crear `compose.dev.yaml`: usa la etapa `development` del Dockerfile (`next dev`) y monta el código del host en modo solo lectura para recargar sin reconstruir.
+3. Crear `compose.backend-network.yaml` como capa opcional que une el servicio a la red del backend (`sg-sst_default` por defecto), por ejemplo `SGSST_API_URL=http://backend:8000`. Así el backend no necesita exponerse a internet.
+
+**Archivos:** `next.config.mjs`, `Dockerfile` (nuevo), `.dockerignore` (nuevo), `compose.yaml` (nuevo), `compose.dev.yaml` (nuevo), `compose.backend-network.yaml` (nuevo).
 
 **Criterios de aceptación**
 - [ ] `docker compose up --build` levanta la app y el health check queda en `healthy`.
@@ -161,7 +166,7 @@ Cada fase se entrega como un commit o PR revisable, con su código, sus tests y 
 **Criterios de aceptación**
 - [ ] Un PR con un error de tipos o un test roto queda en rojo.
 - [ ] Un merge a `main` publica `ghcr.io/jorgegutierrez11/sgsst-rag-frontend:latest` y la etiqueta `sha-*`.
-- [ ] La imagen publicada arranca con `docker compose up` cambiando solo `SGSST_API_URL`.
+- [ ] La imagen publicada arranca con `docker run` cambiando solo `SGSST_API_URL`.
 
 **Riesgo:** ítem 5 (CI y release).
 
