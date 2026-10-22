@@ -1,0 +1,29 @@
+# Dependencies and build output are recreated inside the image
+node_modules
+.next
+tsconfig.tsbuildinfo
+
+# Environment files must never be baked into the image
+.env
+.env.*
+
+# VCS, tooling and local metadata
+.git
+.github
+.codegraph
+.atl
+.vscode
+.idea
+*.log
+
+# Docs, plans and tests are not needed to build or run the app
+odd
+planning
+*.md
+**/*.test.ts
+vitest.config.ts
+
+# Container definitions
+Dockerfile
+.dockerignore
+compose*.yaml

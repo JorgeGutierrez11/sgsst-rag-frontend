@@ -1,0 +1,83 @@
+# 1. DISPARADORES
+name: image
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+
+# 2. PERMISOS Y CONCURRENCIA
+# Public repository: the workflow token only reads code.
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
+# 3. VARIABLES GLOBALES
+env:
+  IMAGE: sg-sst-frontend:local
+  # compose.yaml requires SGSST_API_URL; the smoke test never reaches the backend.
+  SGSST_API_URL: http://backend.invalid:8000
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+
+      # 4. PREPARACIÓN DEL ENTORNO
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+
+      # 5. CONSTRUCCIÓN DE LA IMAGEN
+      - name: Build image
+        run: docker compose build
+
+      - name: Image size after build
+        run: docker image ls "$IMAGE" --format '{{.Repository}}:{{.Tag}} {{.Size}}'
+
+
+      # 6. VERIFICACIÓN DE LA IMAGEN
+      - name: Check image hygiene
+        run: |
+          # Runs as the unprivileged node user.
+          test "$(docker run --rm "$IMAGE" id -u)" = 1000
+          # Only the standalone server ships: no env files, source code, tests or tooling.
+          docker run --rm "$IMAGE" sh -c 'test ! -e /app/.env && test ! -e /app/.env.local && test ! -e /app/app && test ! -e /app/features && test ! -e /app/proxy.ts && test ! -e /app/.git'
+
+
+      # 7. PRUEBA DE ARRANQUE
+      - name: Start container
+        run: docker compose up -d --wait --wait-timeout 120
+
+      - name: Smoke test endpoints
+        run: |
+          curl -fsS http://127.0.0.1:3000/api/health
+          echo
+          curl -fsS -o /dev/null http://127.0.0.1:3000/
+          curl -fsS -o /dev/null http://127.0.0.1:3000/consulta
+          curl -fsS -o /dev/null http://127.0.0.1:3000/diagnostico
+          # The proxy is active: a path outside /api/v1/ is rejected by proxy.ts, without calling the backend.
+          body="$(curl -sS -w '\n%{http_code}' http://127.0.0.1:3000/api/v1)"
+          echo "$body"
+          test "$(tail -n1 <<<"$body")" = 404
+          grep -q 'Ruta no encontrada' <<<"$body"
+
+
+      # 8. LIMPIEZA
+      - name: Container logs on failure
+        if: failure()
+        run: docker compose logs frontend
+
+      - name: Stop container
+        if: always()
+        run: docker compose down

@@ -1,0 +1,34 @@
+# Development overlay: docker compose -f compose.yaml -f compose.dev.yaml up --build
+services:
+  frontend:
+    build:
+      target: development
+    # Etiqueta propia para no sobrescribir la imagen sg-sst-frontend:local.
+    image: sg-sst-frontend:dev
+    volumes:
+      # El código del host reemplaza la copia de la imagen para recargar sin reconstruir.
+      - type: bind
+        source: ./app
+        target: /app/app
+        read_only: true
+      - type: bind
+        source: ./components
+        target: /app/components
+        read_only: true
+      - type: bind
+        source: ./features
+        target: /app/features
+        read_only: true
+      - type: bind
+        source: ./lib
+        target: /app/lib
+        read_only: true
+      - type: bind
+        source: ./shared
+        target: /app/shared
+        read_only: true
+      - type: bind
+        source: ./proxy.ts
+        target: /app/proxy.ts
+        read_only: true
+    restart: "no"

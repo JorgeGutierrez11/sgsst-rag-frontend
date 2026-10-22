@@ -43,7 +43,7 @@ export function MessageList({ messages, loading, focusedMessageId }: MessageList
       aria-live="polite"
       ref={messagesContainerRef}
     >
-      {messages.map((message, index) => (
+      {messages.map((message) => (
         <div
           ref={message.id === focusedMessageId ? focusedMessageRef : null}
           className={
@@ -51,7 +51,7 @@ export function MessageList({ messages, loading, focusedMessageId }: MessageList
               ? 'flex flex-row-reverse items-start gap-2.5'
               : 'flex items-start gap-2.5'
           }
-          key={`${message.role}-${index}`}
+          key={message.id}
           tabIndex={message.id === focusedMessageId ? -1 : undefined}
         >
           <div

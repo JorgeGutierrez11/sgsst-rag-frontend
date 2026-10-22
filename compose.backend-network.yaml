@@ -1,0 +1,16 @@
+# Optional overlay: joins the backend's Docker network so the proxy reaches it by service name,
+# without exposing the backend publicly.
+#
+#   cd ../proyecto_rag && docker compose up -d          # backend project "sg-sst" creates sg-sst_default
+#   SGSST_API_URL=http://backend:8000 \
+#     docker compose -f compose.yaml -f compose.backend-network.yaml up -d
+services:
+  frontend:
+    networks:
+      - default
+      - backend
+
+networks:
+  backend:
+    external: true
+    name: ${SGSST_BACKEND_NETWORK:-sg-sst_default}
