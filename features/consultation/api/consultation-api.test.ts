@@ -17,7 +17,7 @@ function jsonResponse(body: unknown, status = 200) {
 
 async function loadClient() {
   vi.resetModules()
-  vi.stubEnv('NEXT_PUBLIC_SGSST_API_URL', 'http://api.test')
+  vi.stubEnv('NEXT_PUBLIC_SGSST_API_URL', 'http://legacy-public-url.test')
   return import('@/features/consultation/api/consultation-api')
 }
 
@@ -35,7 +35,7 @@ describe('queryConsultation', () => {
 
     expect(result).toEqual(validResponse)
     const [url, init] = fetchMock.mock.calls[0]
-    expect(url).toBe('http://api.test/api/v1/query')
+    expect(url).toBe('/api/v1/query')
     expect(init.method).toBe('POST')
     expect(JSON.parse(init.body)).toEqual({ question: '¿Qué exige la norma?', conversation_id: 'conversation-1' })
   })

@@ -9,7 +9,7 @@ function jsonResponse(body: unknown, status = 200) {
 
 async function loadClient() {
   vi.resetModules()
-  vi.stubEnv('NEXT_PUBLIC_SGSST_API_URL', 'http://api.test')
+  vi.stubEnv('NEXT_PUBLIC_SGSST_API_URL', 'http://legacy-public-url.test')
   return import('@/features/diagnostic/api/diagnostic-api')
 }
 
@@ -23,7 +23,7 @@ describe('submitDiagnosticAnswer', () => {
     await submitDiagnosticAnswer('diag/1 a', payload)
 
     const [url, init] = fetchMock.mock.calls[0]
-    expect(url).toBe('http://api.test/api/v1/diagnostics/diag%2F1%20a/answers')
+    expect(url).toBe('/api/v1/diagnostics/diag%2F1%20a/answers')
     expect(init.method).toBe('POST')
     expect(JSON.parse(init.body)).toEqual(payload)
   })
@@ -47,7 +47,7 @@ describe('getDiagnosticReport', () => {
 
     const blob = await getDiagnosticReport('diag-1')
 
-    expect(fetchMock.mock.calls[0][0]).toBe('http://api.test/api/v1/diagnostics/diag-1/report')
+    expect(fetchMock.mock.calls[0][0]).toBe('/api/v1/diagnostics/diag-1/report')
     expect(blob.type).toBe('application/pdf')
     await expect(blob.text()).resolves.toBe('%PDF-1.7')
   })

@@ -8,7 +8,7 @@ import type {
 } from '@/features/diagnostic/diagnostic.types'
 import { parseApiError, requestJson } from '@/shared/api/http-client'
 
-const DIAGNOSTIC_API_URL = `${process.env.NEXT_PUBLIC_SGSST_API_URL}/api/v1/diagnostics`
+const DIAGNOSTIC_API_URL = '/api/v1/diagnostics'
 
 export async function createDiagnostic(
   payload: CreateDiagnosticRequest,

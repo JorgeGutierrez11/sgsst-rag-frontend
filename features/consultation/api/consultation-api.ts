@@ -1,7 +1,7 @@
 import type { ConsultationQueryRequest, ConsultationQueryResponse } from '@/features/consultation/model/consultation.types'
 import { requestJson } from '@/shared/api/http-client'
 
-const CONSULTATION_API_URL = `${process.env.NEXT_PUBLIC_SGSST_API_URL}/api/v1/query`
+const CONSULTATION_API_URL = '/api/v1/query'
 
 export async function queryConsultation(request: ConsultationQueryRequest): Promise<ConsultationQueryResponse> {
   const data = await requestJson<unknown>(CONSULTATION_API_URL, {
