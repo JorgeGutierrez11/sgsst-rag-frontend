@@ -10,7 +10,7 @@ on:
 
 
 # 2. PERMISOS Y CONCURRENCIA
-# Public repository: the workflow token only reads code.
+# Public repository: the workflow token only reads code; only the image job may write packages.
 permissions:
   contents: read
 
@@ -24,11 +24,21 @@ env:
   IMAGE: sg-sst-frontend:local
   # compose.yaml requires SGSST_API_URL; the smoke test never reaches the backend.
   SGSST_API_URL: http://backend.invalid:8000
+  # Published as ghcr.io/<owner>/sg-sst-frontend (lowercased in the publish step).
+  PUBLISH_IMAGE_NAME: sg-sst-frontend
 
 jobs:
+  tests:
+    uses: ./.github/workflows/tests.yml
+
   image:
+    needs: tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Job-level permissions replace the top-level ones: keep contents read and add package writes here only.
+    permissions:
+      contents: read
+      packages: write
     steps:
 
       # 4. PREPARACIÓN DEL ENTORNO
@@ -73,7 +83,24 @@ jobs:
           grep -q 'Ruta no encontrada' <<<"$body"
 
 
-      # 8. LIMPIEZA
+      # 8. PUBLICACIÓN EN GHCR
+      # Only main publishes, and only the image that passed the smoke test: re-tagged, never rebuilt.
+      - name: Publish image to GHCR
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # GHCR requires lowercase repository names.
+          target="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${PUBLISH_IMAGE_NAME,,}"
+          echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          for tag in "sha-${GITHUB_SHA::7}" main; do
+            docker tag "$IMAGE" "$target:$tag"
+            docker push "$target:$tag"
+          done
+          docker logout ghcr.io
+
+
+      # 9. LIMPIEZA
       - name: Container logs on failure
         if: failure()
         run: docker compose logs frontend

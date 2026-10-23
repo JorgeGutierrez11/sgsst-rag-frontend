@@ -55,6 +55,9 @@ RUN pnpm build
 # 5. IMAGEN DE PRODUCCIÓN
 FROM ${NODE_IMAGE} AS runtime
 
+# Vincula la imagen publicada en GHCR con este repositorio
+LABEL org.opencontainers.image.source=https://github.com/JorgeGutierrez11/sgsst-rag-frontend
+
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
     PORT=3000 \
