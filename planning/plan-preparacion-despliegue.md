@@ -9,7 +9,7 @@ Este plan resuelve la deuda técnica que impide desplegar el frontend en contene
 | URL del backend | El frontend actúa como proxy de `/api/v1/*` mediante `proxy.ts` y lee `SGSST_API_URL` en cada petición. Una sola imagen para todos los entornos y sin CORS. Reemplaza el acuerdo previo de "sin proxy". |
 | Gestor de paquetes | pnpm es el único oficial. Se elimina `package-lock.json`. |
 | Docker Compose | Levanta solo el frontend; el backend se publica y despliega desde su propio repositorio. |
-| GitHub Actions | Dos workflows como el backend: `tests.yml` (calidad) e `image.yml` (imagen y arranque). Publicación en GHCR pendiente hasta que exista producción. |
+| GitHub Actions | Dos workflows como el backend: `tests.yml` (calidad) e `image.yml` (imagen y arranque). Desde la decisión del 2026-10-22, `image.yml` publica en GHCR solo desde `main`. |
 | Tests | Vitest, con tests del proxy y de los clientes de la API. |
 
 > Los `rewrites` de `next.config.mjs` no sirven para este objetivo: Next los fija durante el build. El proxy tiene que vivir en `proxy.ts`, que se ejecuta en cada petición.
@@ -159,7 +159,7 @@ Se sigue la misma estructura del backend: dos workflows con secciones numeradas,
    - `docker compose build` de `sg-sst-frontend:local` y su tamaño.
    - Higiene de la imagen: usuario sin privilegios (uid 1000) y sin `.env`, código fuente ni `.git`.
    - Prueba de arranque con `docker compose up --wait`: `/api/health`, las páginas principales y el proxy activo (`/api/v1` responde el 404 de `proxy.ts` sin llamar al backend).
-3. Publicación en GHCR: pendiente de decisión. Mientras no exista producción, la imagen no se publica (igual que el backend).
+3. Publicación en GHCR (decidida el 2026-10-22, igual que el backend): `image.yml` llama primero a `tests.yml` y, solo en `main`, re-etiqueta y publica la imagen probada como `ghcr.io/<owner>/sg-sst-frontend:sha-<7>` y `:main`.
 
 **Archivos:** `.github/workflows/tests.yml` (nuevo), `.github/workflows/image.yml` (nuevo).
 

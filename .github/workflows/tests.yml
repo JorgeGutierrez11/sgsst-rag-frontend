@@ -7,6 +7,8 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+  # image.yml calls this workflow so the image is only built after the checks pass.
+  workflow_call:
 
 
 # 2. PERMISOS Y CONCURRENCIA
@@ -14,8 +16,10 @@ on:
 permissions:
   contents: read
 
+# When called from image.yml, github.workflow is the caller's name: the "-tests-" suffix keeps
+# this group distinct from the caller's group, which would otherwise deadlock.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-tests-${{ github.ref }}
   cancel-in-progress: true
 
 

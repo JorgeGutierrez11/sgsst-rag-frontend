@@ -33,7 +33,8 @@
 ## Docker and CI
 - `Dockerfile` mirrors the backend layout (numbered sections); targets: `development` (next dev) and `runtime` (standalone server as the `node` user with a `/api/health` HEALTHCHECK).
 - Compose mirrors the backend: `compose.yaml` builds `sg-sst-frontend:local` and requires `SGSST_API_URL`; `compose.dev.yaml` adds hot reload with read-only source mounts; `compose.backend-network.yaml` joins the backend network `sg-sst_default` (`SGSST_API_URL=http://backend:8000`).
-- GitHub Actions: `.github/workflows/tests.yml` (typecheck, lint, test, build) and `image.yml` (image build, hygiene, startup smoke test). Neither publishes nor deploys.
+- GitHub Actions: `.github/workflows/tests.yml` (typecheck, lint, test, build; also reusable via `workflow_call`) and `image.yml` (runs `tests.yml` first, then image build, hygiene, startup smoke test). On pushes to `main` only, `image.yml` re-tags the smoke-tested image (never rebuilds) and pushes `ghcr.io/<owner>/sg-sst-frontend:sha-<7>` and `:main` with `GITHUB_TOKEN`; pull requests never push. Nothing deploys; the production compose lives in the backend repo (`deploy/`).
+- The `tests.yml` concurrency group carries a `-tests-` suffix because, when called, `github.workflow` is the caller's name; an identical group would deadlock.
 - Usage details for humans live in `GUIA_EJECUCION_FRONTEND.md`.
 
 ## Styling/UI conventions

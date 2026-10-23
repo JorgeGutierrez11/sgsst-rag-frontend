@@ -137,10 +137,17 @@ Los mismos comandos que ejecuta GitHub Actions:
 
 | Workflow | Cuándo corre | Qué hace |
 |----------|--------------|----------|
-| `tests.yml` | Push a `dev` y `main`, PR a `main`, manual | Instalación con lockfile, typecheck, lint, tests y build |
-| `image.yml` | Push a `main`, PR a `main`, manual | Construye la imagen, revisa su higiene (sin root, sin `.env` ni código fuente) y prueba su arranque |
+| `tests.yml` | Push a `dev` y `main`, PR a `main`, manual; también lo llama `image.yml` | Instalación con lockfile, typecheck, lint, tests y build |
+| `image.yml` | Push a `main`, PR a `main`, manual | Corre primero `tests.yml`; luego construye la imagen, revisa su higiene (sin root, sin `.env` ni código fuente) y prueba su arranque. Solo en `main` publica esa misma imagen en GHCR |
 
-Ninguno publica la imagen ni despliega: solo verifican.
+Publicación en GHCR:
+
+- Solo en push (o ejecución manual) sobre `main`. Los PR construyen y prueban la imagen, pero nunca la publican.
+- Se publica la misma imagen que pasó la prueba de arranque (se re-etiqueta, no se reconstruye): `ghcr.io/jorgegutierrez11/sg-sst-frontend:sha-<7 caracteres>` y `:main`.
+- Usa el `GITHUB_TOKEN` del workflow: no hace falta un PAT ni secretos nuevos.
+- Tras la primera publicación, hay que cambiar una sola vez la visibilidad del paquete a pública (configuración del paquete en GitHub) para que la VPS lo descargue sin credenciales.
+
+Ningún workflow despliega. El Compose de producción vive en el repositorio del backend (`deploy/`).
 
 ---
 
