@@ -18,6 +18,8 @@
   --brand-dark: 160 100% 42%;
   --brand-light: 160 100% 92%;
   --brand-text: 221 39% 11%;
+  /* Marca como texto sobre superficies claras (contraste >= 4.5:1 sobre blanco) */
+  --brand-strong: 160 100% 24%;
 
   /* Borders */
   --borde-light: 220 13% 91%;
@@ -76,6 +78,7 @@
   --color-brand-dark: hsl(var(--brand-dark));
   --color-brand-light: hsl(var(--brand-light));
   --color-brand-text: hsl(var(--brand-text));
+  --color-brand-strong: hsl(var(--brand-strong));
   --color-borde-light: hsl(var(--borde-light));
   --color-borde-gray: hsl(var(--borde-gray));
   --color-borde-strong: hsl(var(--borde-strong));
@@ -154,6 +157,7 @@
   --brand-light: 160 40% 16%;
   --brand-text: 222 40% 8%;
   /* sigue siendo OSCURO: es el texto sobre el botón primario */
+  --brand-strong: 160 84% 45%;
 
   /* Borders */
   --borde-light: 222 14% 16%;

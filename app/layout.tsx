@@ -11,6 +11,8 @@ export const viewport: Viewport = {
   themeColor: 'hsl(120 14% 99%)',
   width: 'device-width',
   initialScale: 1,
+  // Android: el teclado redimensiona el layout para que el campo de consulta no quede tapado
+  interactiveWidget: 'resizes-content',
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
