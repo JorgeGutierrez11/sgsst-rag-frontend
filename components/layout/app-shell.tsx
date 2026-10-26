@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 import { BottomNav } from '@/components/layout/bottom-nav'
+import { MobileHeader } from '@/components/layout/mobile-header'
 import { Sidebar } from '@/components/layout/sidebar'
 import { getRouteByPathname } from '@/shared/navigation.routes'
 
@@ -14,10 +15,11 @@ export function AppShell({ children }: AppShellProps) {
   const activeRoute = getRouteByPathname(usePathname() ?? '/')
 
   return (
-    <main className="h-dvh overflow-hidden bg-capa-main p-3 md:p-4">
-      <div className="mx-auto flex h-[calc(100dvh-24px)] max-w-360 gap-3 md:h-[calc(100dvh-32px)] md:gap-4">
+    <main className="h-dvh overflow-hidden bg-capa-main p-0 md:p-4">
+      <div className="mx-auto flex h-dvh max-w-360 flex-col md:h-[calc(100dvh-32px)] md:flex-row md:gap-4">
+        <MobileHeader />
         <Sidebar active={activeRoute.id} />
-        <section className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] overflow-hidden rounded-panel bg-capa-surface shadow-panel pb-[calc(var(--bottom-nav-height)+env(safe-area-inset-bottom))] md:pb-0">
+        <section className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] overflow-hidden rounded-none bg-capa-surface shadow-none pb-[calc(var(--bottom-nav-height)+env(safe-area-inset-bottom))] md:rounded-panel md:pb-0 md:shadow-panel">
           {children}
         </section>
         <BottomNav active={activeRoute.id} />

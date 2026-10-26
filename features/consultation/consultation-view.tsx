@@ -19,7 +19,7 @@ export function ConsultationView() {
   } = useConsultationSession()
 
   return (
-    <section className="mx-auto grid h-[calc(100dvh-var(--bottom-nav-height)-env(safe-area-inset-bottom)-24px)] min-h-0 w-full grid-rows-[minmax(0,1fr)_auto] px-[clamp(16px,5vw,86px)] pt-0 pb-(--mobile-page-y) md:h-[calc(100dvh-32px)] md:max-w-230 md:pb-(--desktop-page-y)">
+    <section className="mx-auto grid h-full min-h-0 w-full grid-rows-[minmax(0,1fr)_auto] px-[clamp(16px,5vw,86px)] pt-0 pb-(--mobile-page-y) md:max-w-230 md:pb-(--desktop-page-y)">
       <div className="min-h-0 overflow-hidden">
         <div className="grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-[clamp(12px,2vh,18px)] pt-(--mobile-page-y) md:pt-(--desktop-page-y)">
           {messages.length > 0 && (

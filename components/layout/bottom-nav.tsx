@@ -18,7 +18,7 @@ export function BottomNav({ active }: BottomNavProps) {
           aria-current={active === id ? 'page' : undefined}
         >
           <Icon size={19} />
-          <span>{shortLabel}</span>
+          <span className="max-w-full truncate">{shortLabel}</span>
         </Link>
       ))}
     </nav>

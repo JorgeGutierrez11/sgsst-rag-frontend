@@ -7,7 +7,7 @@ const homeActionCardClassName = 'group flex min-h-30 min-w-0 items-start gap-3 r
 
 export function HomeView() {
   return (
-    <section className="relative mx-auto grid min-h-[calc(100dvh-var(--bottom-nav-height)-env(safe-area-inset-bottom)-24px)] w-full max-w-230 content-center gap-6 px-[clamp(16px,5vw,86px)] py-(--mobile-page-y) md:min-h-[calc(100dvh-32px)] md:gap-7 md:py-(--desktop-page-y)">
+    <section className="relative mx-auto grid min-h-full w-full max-w-230 content-center gap-6 px-[clamp(16px,5vw,86px)] py-(--mobile-page-y) md:gap-7 md:py-(--desktop-page-y)">
       {/* Jerarquía: marca -> título -> una sola frase de contexto */}
       <div className="relative isolate mx-auto grid w-full max-w-170 justify-items-center gap-3 text-center md:gap-4">
         {/* El brillo vive dentro del hero: queda detrás del logo y el título,
