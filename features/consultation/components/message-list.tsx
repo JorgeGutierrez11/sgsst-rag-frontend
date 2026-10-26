@@ -92,7 +92,7 @@ export function MessageList({ messages, loading, focusedMessageId }: MessageList
                       <button
                         key={`${reference}-${refIndex}`}
                         type="button"
-                        className="mt-1 inline-flex max-w-full items-center gap-2 rounded-[5px] border border-borde-light bg-capa-main p-px pl-1.5 text-left font-medium text-txt-muted transition-colors hover:border-brand-primary/40 hover:text-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
+                        className="mt-1 inline-flex max-w-full items-center gap-2 rounded-[5px] border border-borde-light bg-capa-main py-1.5 pr-2 pl-1.5 text-left md:p-px md:pl-1.5 font-medium text-txt-muted transition-colors hover:border-brand-primary/40 hover:text-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
                         disabled={!chunk}
                         onClick={() => chunk && setActiveReference({ label: reference, chunk })}
                       >

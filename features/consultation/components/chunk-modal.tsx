@@ -44,16 +44,16 @@ export function ChunkReferenceModal({ reference, chunk, onClose }: ChunkReferenc
         <div className="flex items-center justify-between gap-3 rounded-tl-(--radius-panel) rounded-tr-(--radius-panel) border-borde-light bg-capa-main/70 py-3.5 pr-4 pl-4.5">
           <p
             id="chunk-modal-title"
-            className="m-0 flex min-w-0 items-center gap-1.75 truncate text-[13px] font-bold text-txt-bold"
+            className="m-0 flex min-w-0 items-center gap-1.75 text-[13px] font-bold text-txt-bold md:truncate"
           >
             <FileText className="shrink-0 text-brand-primary" size={14} aria-hidden="true" />
-            {reference}
+            <span className="line-clamp-2 min-w-0 md:line-clamp-none">{reference}</span>
           </p>
 
           <button
             ref={closeButtonRef}
             type="button"
-            className="shrink-0 rounded-full p-1.5 leading-none text-txt-muted transition-[background-color,color] hover:bg-capa-muted hover:text-txt-bold"
+            className="shrink-0 rounded-full p-2.5 leading-none md:p-1.5 text-txt-muted transition-[background-color,color] hover:bg-capa-muted hover:text-txt-bold"
             onClick={onClose}
             aria-label="Cerrar"
           >

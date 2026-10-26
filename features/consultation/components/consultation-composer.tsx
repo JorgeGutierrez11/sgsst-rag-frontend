@@ -48,7 +48,7 @@ export function ConsultationComposer({
   }
 
   return (
-    <div className="sticky bottom-0 w-full bg-linear-to-t from-capa-surface via-capa-surface to-transparent pt-3">
+    <div className="sticky bottom-0 w-full bg-linear-to-t from-capa-surface via-capa-surface to-transparent pt-2 md:pt-3">
       <div className="flex items-end gap-2 rounded-2xl border border-brand-primary/20 bg-capa-surface p-2 shadow-sm transition-[border-color,box-shadow] duration-200 focus-within:border-brand-primary/50 focus-within:shadow-md">
         <textarea
           ref={textareaRef}
@@ -74,7 +74,9 @@ export function ConsultationComposer({
         </button>
       </div>
 
-      <p className="m-0 mt-2 px-2 text-center text-[11px] leading-relaxed text-txt-muted">
+      {/* En móvil el tamaño escala con el ancho disponible para que el aviso quepa siempre en un renglón
+          (el texto mide ~29.4em; 30.5 deja margen para diferencias entre fuentes) */}
+      <p className="m-0 mt-1.5 px-2 text-center text-[11px] leading-relaxed text-txt-muted max-md:truncate max-md:text-[length:min(11px,calc((100vw_-_2*max(16px,5vw)_-_16px)/30.5))] md:mt-2">
         NormIA puede cometer errores. Verifica la información importante.
       </p>
     </div>
