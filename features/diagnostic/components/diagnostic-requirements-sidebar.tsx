@@ -41,7 +41,8 @@ export function DiagnosticRequirementsSidebar({
           ? 'El informe ya se generó. Este diagnóstico es de solo lectura.'
           : 'Selecciona un requisito respondido o en curso para rehacerlo desde el principio.'}
       </p>
-      <ol className="m-0 max-h-[min(56vh,520px)] list-none space-y-1 overflow-y-auto p-0 pr-1">
+      {/* Scroll propio desde md; en móvil la lista sigue el scroll de la página para no atrapar el dedo */}
+      <ol className="m-0 list-none space-y-1 p-0 md:max-h-[min(56vh,520px)] md:overflow-y-auto md:pr-1">
         {requirements.map((requirement) => {
           const isCurrent = requirement.requirement_id === activeRequirementId
           const canRecheck = requirement.status !== 'pending' && !disabled && !readOnly

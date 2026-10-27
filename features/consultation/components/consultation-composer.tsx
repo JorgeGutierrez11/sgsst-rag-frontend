@@ -1,6 +1,7 @@
 
-import { useLayoutEffect, useRef, type KeyboardEvent } from 'react'
+import type { KeyboardEvent } from 'react'
 import { Send } from 'lucide-react'
+import { useAutoResizeTextarea } from '@/shared/hooks/use-auto-resize-textarea'
 
 const IME_COMPOSITION_KEY_CODE = 229
 
@@ -17,24 +18,8 @@ export function ConsultationComposer({
   onInputChange,
   onSend,
 }: ConsultationComposerProps) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const textareaRef = useAutoResizeTextarea(input, { maxHeight: 320, maxViewportRatio: 0.4 })
   const canSend = input.trim().length > 0 && !loading
-
-  useLayoutEffect(() => {
-    const textarea = textareaRef.current
-    if (!textarea) return
-
-    // Restablecer la altura para calcular el contenido real.
-    textarea.style.height = 'auto'
-
-    // Crecer hasta el límite y después permitir scroll interno.
-    const maxHeight = Math.min(320, window.innerHeight * 0.4)
-    const newHeight = Math.min(textarea.scrollHeight, maxHeight)
-
-    textarea.style.height = `${newHeight}px`
-    textarea.style.overflowY =
-      textarea.scrollHeight > maxHeight ? 'auto' : 'hidden'
-  }, [input])
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     const isComposingText =

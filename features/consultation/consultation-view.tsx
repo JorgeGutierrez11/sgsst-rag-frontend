@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowUp, Info, MessageCircle, X } from 'lucide-react'
+import { ArrowUp, Info, MessageCircle, RotateCcw, X } from 'lucide-react'
 import { ConsultationComposer } from '@/features/consultation/components/consultation-composer'
 import { consultationExamples } from '@/features/consultation/model/examples'
 import { MessageList } from '@/features/consultation/components/message-list'
@@ -15,6 +15,7 @@ export function ConsultationView() {
     focusedMessageId,
     setInput,
     send,
+    clearError,
     clearSession
   } = useConsultationSession()
 
@@ -40,6 +41,19 @@ export function ConsultationView() {
                   ¿Qué necesitas saber?
                 </h1>
               </div>
+
+              {/* Deshabilitado durante la carga para que una respuesta tardía no entre en la conversación nueva */}
+              <button
+                type="button"
+                className="ml-auto inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center gap-1.5 rounded-full border border-white/80 bg-capa-surface px-3 text-xs font-semibold text-txt-medium shadow-xs transition-[color,box-shadow] hover:text-brand-dark hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-60 md:min-h-9"
+                onClick={() => clearSession()}
+                disabled={loading}
+                aria-label="Nueva consulta"
+                title="Nueva consulta"
+              >
+                <RotateCcw className="text-brand-primary" size={15} />
+                <span className="max-md:hidden">Nueva consulta</span>
+              </button>
             </div>
           )}
 
@@ -102,7 +116,7 @@ export function ConsultationView() {
               <button
                 type="button"
                 className="-my-2.5 -mr-1.5 ml-auto grid size-9 shrink-0 place-items-center rounded-full text-inherit"
-                onClick={() => clearSession()}
+                onClick={() => clearError()}
                 aria-label="Cerrar error"
               >
                 <X size={14} />

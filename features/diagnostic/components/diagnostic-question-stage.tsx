@@ -14,6 +14,7 @@ import type {
   DiagnosticAnswer,
   DiagnosticQuestion,
 } from '@/features/diagnostic/diagnostic.types'
+import { useAutoResizeTextarea } from '@/shared/hooks/use-auto-resize-textarea'
 
 type DiagnosticQuestionStageProps = {
   question: DiagnosticQuestion
@@ -46,6 +47,8 @@ export function DiagnosticQuestionStage({
   onRequestConsultationHelp,
   onRestart,
 }: DiagnosticQuestionStageProps) {
+  const textareaRef = useAutoResizeTextarea(textAnswer, { maxHeight: 240, maxViewportRatio: 0.35 })
+
   return (
     <>
       <style>{QUESTION_MOTION_CSS}</style>
@@ -121,6 +124,8 @@ export function DiagnosticQuestionStage({
         </div>
 
         <textarea
+          ref={textareaRef}
+          aria-label="Tu respuesta escrita"
           value={textAnswer}
           disabled={isSubmitting}
           onChange={(event) => onTextAnswerChange(event.target.value)}

@@ -17,6 +17,7 @@ export function useConsultationSession() {
     const finishAssistantMessage = useAgentSessionStore((state) => state.finishAssistantMessage)
     const failMessage = useAgentSessionStore((state) => state.failMessage)
     const finishLoading = useAgentSessionStore((state) => state.finishLoading)
+    const clearError = useAgentSessionStore((state) => state.clearError)
     const clearSession = useAgentSessionStore((state) => state.clearSession)
 
     const send = async (text = input) => {
@@ -48,6 +49,7 @@ export function useConsultationSession() {
         focusedMessageId,
         setInput,
         send,
+        clearError,
         clearSession,
     }
 }
