@@ -54,7 +54,8 @@
   --radius-panel: 28px;
   --radius-card: 24px;
   --radius-control: 18px;
-  --bottom-nav-height: 76px;
+  /* Barra inferior móvil: 56px de alto + 12px de separación del borde */
+  --bottom-nav-height: 68px;
   --composer-height: 92px;
   --desktop-page-y: clamp(20px, 3vh, 36px);
   --mobile-page-y: clamp(14px, 2.5vh, 22px);

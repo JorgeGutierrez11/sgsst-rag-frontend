@@ -15,7 +15,7 @@ export function AppShell({ children }: AppShellProps) {
   const activeRoute = getRouteByPathname(usePathname() ?? '/')
 
   return (
-    <main className="h-dvh overflow-hidden bg-capa-main p-0 md:p-4">
+    <main className="h-dvh overflow-hidden bg-capa-surface p-0 md:bg-capa-main md:p-4">
       <div className="mx-auto flex h-dvh max-w-360 flex-col md:h-[calc(100dvh-32px)] md:flex-row md:gap-4">
         <MobileHeader />
         <Sidebar active={activeRoute.id} />
