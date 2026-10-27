@@ -14,14 +14,14 @@ import { useDiagnosticSession } from '@/features/diagnostic/hooks/use-diagnostic
 
 function getShellSizeClassName(isGuideStage: boolean, hasRequirementsPanel: boolean) {
   if (isGuideStage) {
-    return 'max-w-4xl p-5 sm:p-6'
+    return 'max-w-4xl md:p-6'
   }
 
   if (hasRequirementsPanel) {
-    return 'max-w-6xl p-3 sm:p-4 xl:p-5'
+    return 'max-w-6xl md:p-4 xl:p-5'
   }
 
-  return 'max-w-2xl p-5 sm:p-6 xl:p-7'
+  return 'max-w-2xl md:p-6 xl:p-7'
 }
 
 export function DiagnosticView() {
@@ -148,7 +148,7 @@ export function DiagnosticView() {
       className="mx-auto flex h-full min-h-0 w-full flex-col overflow-y-auto overflow-x-hidden px-[clamp(16px,4vw,56px)] py-(--mobile-page-y) md:py-(--desktop-page-y)"
     >
       <div
-        className={`mx-auto my-auto w-full min-w-0 rounded-card border border-white/70 bg-capa-surface shadow-panel ${shellSizeClassName}`}
+        className={`mx-auto my-auto w-full min-w-0 bg-capa-surface md:rounded-card md:border md:border-white/70 md:shadow-panel ${shellSizeClassName}`}
       >
         {!isGuideStage && <h1 className="sr-only">Diagnóstico SG-SST</h1>}
 
@@ -174,8 +174,9 @@ export function DiagnosticView() {
 
         {(isQuestionStage || Boolean(diagnosticSession.result)) && (
           <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(245px,310px)] xl:gap-5">
-            <div className="min-w-0">
-              <details className="mb-4 rounded-xl border border-borde-light bg-capa-main/60 p-2 xl:hidden">
+            {/* En móvil (flex + order) el progreso va después de la pregunta para no empujarla hacia abajo */}
+            <div className="min-w-0 max-md:flex max-md:flex-col">
+              <details className="mb-4 rounded-xl border border-borde-light bg-capa-main/60 p-2 max-md:order-last max-md:mt-4 max-md:mb-0 xl:hidden">
                 <summary className="cursor-pointer px-2 py-1.5 text-sm font-bold text-brand-dark">
                   Ver requisitos ({diagnosticSession.progress?.completed_requirements ?? 0} de {diagnosticSession.requirements.length})
                 </summary>

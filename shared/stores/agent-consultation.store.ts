@@ -14,6 +14,7 @@ type ConsultationSessionState = {
     finishAssistantMessage: (response: ConsultationQueryResponse) => void
     failMessage: (message: string) => void
     finishLoading: () => void
+    clearError: () => void
     clearSession: () => void
 }
 
@@ -68,6 +69,8 @@ export const useAgentSessionStore = create<ConsultationSessionState>()((set) => 
     failMessage: (message) => set({ error: message }),
 
     finishLoading: () => set({ loading: false }),
+
+    clearError: () => set({ error: '' }),
 
     clearSession: () => set(createInitialState()),
 }))

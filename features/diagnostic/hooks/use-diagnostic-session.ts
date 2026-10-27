@@ -12,6 +12,7 @@ import {
   restartDiagnosticRequirement,
   submitDiagnosticAnswer,
 } from '@/features/diagnostic/api/diagnostic-api'
+import { buildConsultationHelpQuestion } from '@/features/diagnostic/consultation-help-question'
 import type { DiagnosticAnswer, DiagnosticRequirementProgress } from '@/features/diagnostic/diagnostic.types'
 import { useAgentSessionStore } from '@/shared/stores/agent-consultation.store'
 import { useAgentDiagnosticStore } from '@/shared/stores/agent-diagnostic.store'
@@ -344,20 +345,12 @@ export function useDiagnosticSession() {
       return
     }
 
-    const contextLines = [
-      `Pregunta: ${session.currentQuestion.text}`,
-    ]
-
-    if (session.catalogName) {
-      contextLines.push(`Ámbito: ${session.catalogName}`)
-    }
-
     setConsultationDraft(
-      [
-        ...contextLines,
-        '',
-        'Explícame qué significa y cómo puedo saber si mi empresa cumple.',
-      ].join('\n'),
+      buildConsultationHelpQuestion({
+        requirementName: session.currentQuestion.requirement_name,
+        catalogName: session.catalogName,
+        workerCount: session.workerCount,
+      }),
     )
     router.push('/consulta')
   }

@@ -52,7 +52,7 @@ export function DiagnosticStartStage({
               onChange={(event) => onCompanyNameChange(event.target.value)}
               placeholder="Ej. Taller El Progreso"
               autoComplete="organization"
-              className="min-w-0 flex-1 bg-transparent text-base text-txt-medium outline-none placeholder:text-txt-subtle"
+              className="w-0 min-w-0 flex-1 bg-transparent text-base text-txt-medium outline-none placeholder:text-txt-subtle"
               disabled={isStarting}
             />
           </div>
@@ -73,7 +73,7 @@ export function DiagnosticStartStage({
               value={workerCount}
               onChange={(event) => onWorkerCountChange(event.target.value)}
               placeholder="Ej. 5"
-              className="min-w-0 flex-1 bg-transparent text-base text-txt-medium outline-none placeholder:text-txt-subtle"
+              className="w-0 min-w-0 flex-1 bg-transparent text-base text-txt-medium outline-none placeholder:text-txt-subtle"
               disabled={isStarting}
             />
 

@@ -165,8 +165,9 @@ export function DiagnosticGuideStage({
           </section>
         </div>
 
-        {/* Aviso + acción principal en una sola fila (lg+) */}
-        <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+        {/* Aviso + acción principal en una sola fila (lg+). Por debajo de lg el contenedor
+            desaparece (contents) para que el botón pegajoso use toda la guía como límite */}
+        <div className="max-lg:contents lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-3">
           <div className="flex items-start gap-2.5 rounded-xl border border-brand-primary/25 bg-brand-light/40 px-3.5 py-3">
             <CircleHelp
               className="mt-0.5 shrink-0 text-brand-primary"
@@ -197,7 +198,7 @@ export function DiagnosticGuideStage({
 
           {/* Pegajoso: si la pantalla es baja (o es un celular) y hay que hacer
               scroll, el botón principal sigue siempre a la vista. */}
-          <div className="sticky bottom-0 z-10 bg-linear-to-t from-capa-surface via-capa-surface to-transparent pb-1 pt-3">
+          <div className="sticky bottom-0 z-10 bg-linear-to-t from-capa-surface via-capa-surface to-transparent pb-1 pt-3 max-lg:pb-3 max-md:-bottom-(--mobile-page-y) md:max-lg:-bottom-(--desktop-page-y)">
             <button
               type="button"
               onClick={onAccept}
